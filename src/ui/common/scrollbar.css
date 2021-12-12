@@ -1,0 +1,12 @@
+.has-scrollbar {
+  scrollbar-color: dark;
+  scrollbar-width: thin;
+}
+
+.has-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.has-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+}

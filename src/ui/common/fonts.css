@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: url(res/fonts/Nunito-400.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src: url(res/fonts/icomoon.woff?wrq662) format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+.feather {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.feather-list:before {
+  content: "\e900";
+}
+
+.feather-moon:before {
+  content: "\e901";
+}
+
+.feather-swap:before {
+  content: "\e902";
+}
+
+.feather-sun:before {
+  content: "\e904";
+}
+
+.feather-volume:before {
+  content: "\e903";
+}
+
+.feather-x:before {
+  content: "\e905";
+}

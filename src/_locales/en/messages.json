@@ -1,0 +1,17 @@
+{
+  "extensionName": {
+    "message": "Yate"
+  },
+  "description": {
+    "message": "Yet another translation extension"
+  },
+  "serviceUnavailable": {
+    "message": "Service is unavailable. Please try again in at least a minute"
+  },
+  "translateFullPage": {
+    "message": "Translate this page"
+  },
+  "translateSelectedText": {
+    "message": "Translate selected text"
+  }
+}

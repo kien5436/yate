@@ -1,0 +1,6 @@
+{
+  "e4x": true,
+  "brace_style": "end-expand,preserve-inline",
+  "indent_size": 2,
+  "css": { "selector_separator_newline": false }
+}

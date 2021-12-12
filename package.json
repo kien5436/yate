@@ -1,0 +1,54 @@
+{
+  "name": "yate",
+  "description": "yet another tranlation extension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build-ff": "cross-env BROWSER=firefox webpack",
+    "build-chrome": "cross-env BROWSER=chrome webpack",
+    "pack-src": "zip -r -FS source.zip src INSTRUCTIONS.md package.json webpack.config.js yarn.lock",
+    "release": "yarn build-ff && yarn web-ext-build && yarn pack-src",
+    "release-chrome": "yarn build-chrome && google-chrome --pack-extension=./built --pack-extension-key=./built.pem --disable-setuid-sandbox",
+    "web-ext-build": "web-ext build -s built -a . -o",
+    "web-ext-dev": "web-ext run -s built -p dev",
+    "web-ext-lint": "web-ext lint -s built"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-react-jsx": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "@fullhuman/postcss-purgecss": "^4.0.3",
+    "autoprefixer": "^10.4.0",
+    "babel-loader": "^8.2.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^10.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.5.1",
+    "eslint": "^8.3.0",
+    "eslint-config-pk": "^1.0.2",
+    "eslint-config-preact": "^1.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss": "^8.4.4",
+    "postcss-loader": "^6.2.1",
+    "tailwindcss": "^2.2.19",
+    "web-ext-types": "^3.2.1",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.16.3",
+    "@babel/runtime-corejs3": "^7.16.3",
+    "preact": "^10.6.1",
+    "web-ext": "^6.6.0",
+    "webextension-polyfill": "^0.8.0",
+    "webpack-manifest-plugin": "^4.0.2"
+  },
+  "browserslist": [
+    "last 5 chrome version",
+    "last 5 firefox version",
+    "> 1%"
+  ]
+}
