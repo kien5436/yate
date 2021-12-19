@@ -55,7 +55,7 @@ export default function ComboBox({ className, selectedLang, onLangChange }) {
       />
       <div className="absolute left-0 top-6 w-full rounded-b shadow-md bg-white max-h-40 overflow-hidden z-10 border-b border-r border-l border-blue-400 hidden"
         ref={dropdown}>
-        <ul className="py-1 max-h-40 overflow-y-auto has-scrollbar">
+        <ul className="py-1 max-h-40 overflow-y-auto has-scrollbar text-sm">
           {
             dedicatedLangs.map((name) => <li key={name}
               className="w-full whitespace-nowrap py-1 5 px-4 cursor-default transition-colors hover:bg-blue-400 hover:text-gray-50"

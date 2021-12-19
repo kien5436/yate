@@ -25,5 +25,23 @@
       "150.js",
       "background.js"
     ]
-  }
+  },
+  "content_scripts": [{
+    "all_frames": true,
+    "css": [
+      "229.css",
+      "885.css"
+    ],
+    "js": [
+      "229.js",
+      "396.js",
+      "885.js",
+      "context.js"
+    ],
+    "matches": [
+      "*://*/*"
+    ],
+    "run_at": "document_end"
+  }],
+  "web_accessible_resources": ["res/*"]
 }

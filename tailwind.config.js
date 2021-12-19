@@ -1,3 +1,4 @@
+/** @type import("tailwindcss/tailwind-config").TailwindConfig */
 module.exports = {
   corePlugins: {
     accessibility: false,
@@ -6,26 +7,20 @@ module.exports = {
     float: false,
   },
   darkMode: 'class',
-  theme: {
-    extend: {
-      width: {
-        50: '31.25rem',
-      },
-    },
-  },
-  variants: {
-    extend: {
-      borderWidth: ['focus'],
-    },
-  },
+  important: '#yate',
   plugins: [],
   purge: {
-    enabled: true,
     content: [
       './src/**/*.jsx',
     ],
-    options: {
-      keyframes: true,
+    enabled: true,
+    options: { keyframes: true },
+  },
+  theme: {
+    extend: {
+      width: { 50: '31.25rem' },
+      zIndex: { max: 2147483647 },
     },
   },
-}
+  variants: { extend: { borderWidth: ['focus'] } },
+};

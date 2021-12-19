@@ -51,6 +51,11 @@ module.exports = {
         },
       ],
     },
+    {
+      test: /\.png$/,
+      type: 'asset/resource',
+      generator: { filename: 'res/icons/[name][ext]' },
+    },
     ],
   },
   plugins: [
@@ -68,14 +73,6 @@ module.exports = {
       inject: 'body',
       hash: true,
       chunks: ['popup'],
-    }),
-    new HtmlWebpackPlugin({
-      title: '',
-      filename: 'context.html',
-      template: 'src/ui/context/index.html',
-      inject: 'body',
-      hash: true,
-      chunks: ['context'],
     }),
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new CopyWebpackPlugin({

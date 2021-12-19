@@ -245,7 +245,7 @@ function getResult(data) {
 
     for (let i = 0; i < sentences.length; i++) {
       trans += sentences[i].trans || '';
-      result.spelling = sentences[i].src_translit;
+      result.spelling = `/${sentences[i].src_translit}/`;
     }
 
     result.trans = trans;
@@ -276,7 +276,7 @@ function getResult(data) {
 
   result.synonyms = synonyms;
   result.trans = sentences[0].trans;
-  result.spelling = sentences[1] && sentences[1].src_translit;
+  result.spelling = sentences[1] && `/${sentences[1].src_translit}/`;
 
   return result;
 }
