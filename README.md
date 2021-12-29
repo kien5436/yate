@@ -23,6 +23,9 @@ coming soon
   - Open `chrome://extensions/` (`edge://extensions`) tab, drag and drop the downloaded file to this page
   - If you see a message similar "Extensions Disabled", unpack `.crx` file then choose `Load unpacked`
 
+## Support me
+<a href="https://www.buymeacoffee.com/kien5436" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ## License
 The MIT License
 

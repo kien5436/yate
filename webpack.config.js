@@ -15,6 +15,7 @@ module.exports = {
     popup: './src/ui/popup/index.jsx',
     context: './src/ui/context/index.jsx',
     background: './src/background/index.js',
+    options: './src/ui/options-page/index.jsx',
   },
   output: {
     filename: '[name].js',
@@ -73,6 +74,14 @@ module.exports = {
       inject: 'body',
       hash: true,
       chunks: ['popup'],
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Settings - Yate',
+      filename: 'options.html',
+      template: 'src/ui/options-page/index.html',
+      inject: 'body',
+      hash: true,
+      chunks: ['options'],
     }),
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new CopyWebpackPlugin({

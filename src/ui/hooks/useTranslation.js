@@ -1,6 +1,7 @@
+import { i18n, storage } from "webextension-polyfill";
 import { useEffect, useState } from "preact/hooks";
-import { i18n } from "webextension-polyfill";
 
+import getSettings, { defaultOptions } from '../../settings';
 import { translate } from "../../background/api";
 
 /**
@@ -8,9 +9,21 @@ import { translate } from "../../background/api";
  */
 export default function useTranslation(setResult) {
 
-  const [sourceLang, setSourceLang] = useState('en');
-  const [targetLang, setTargetLang] = useState('vi');
+  const [options, setOptions] = useState(defaultOptions);
+  const [sourceLang, setSourceLang] = useState(options.sourceLang);
+  const [targetLang, setTargetLang] = useState(options.targetLang);
   const [text, setText] = useState('');
+
+  useEffect(() => {
+
+    (async () => {
+
+      const syncedOptions = await getSettings();
+      setOptions(syncedOptions);
+      setSourceLang(syncedOptions.sourceLang);
+      setTargetLang(syncedOptions.targetLang);
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -30,7 +43,19 @@ export default function useTranslation(setResult) {
         setResult(i18n.getMessage('serviceUnavailable'));
       }
     })();
-  }, [sourceLang, targetLang, text]);
+  }, [setResult, sourceLang, targetLang, text]);
+
+  useEffect(() => {
+
+    setOptions((prevOptions) => ({ ...prevOptions, sourceLang }));
+    storage.sync.set({ sourceLang });
+  }, [sourceLang]);
+
+  useEffect(() => {
+
+    setOptions((prevOptions) => ({ ...prevOptions, targetLang }));
+    storage.sync.set({ targetLang });
+  }, [targetLang]);
 
   return {
     setSourceLang,

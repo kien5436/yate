@@ -6,6 +6,13 @@
 }
 
 @font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: url(res/fonts/Nunito-700.woff2) format('woff2');
+}
+
+@font-face {
   font-family: 'icomoon';
   src: url(res/fonts/icomoon.woff?wrq662) format('woff');
   font-weight: normal;
@@ -29,26 +36,31 @@ body {
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
+  line-height: 1;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.feather-list:before {
-  content: "\e900";
+.feather-github:before {
+  content: "\e901";
 }
 
-.feather-moon:before {
-  content: "\e901";
+.feather-help-circle:before {
+  content: "\e904";
+}
+
+.feather-star:before {
+  content: "\e906";
 }
 
 .feather-swap:before {
   content: "\e902";
 }
 
-.feather-sun:before {
-  content: "\e904";
+.feather-list:before {
+  content: "\e900";
 }
 
 .feather-volume:before {

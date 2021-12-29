@@ -88,16 +88,17 @@ function MainPanel() {
             className="mb-2"
             lang={targetLang} />
           {translation.synonyms &&
-          translation.synonyms.map(({ type, terms }) => (
-            <Fragment key={type}>
-              <p className="text-sm pl-2 text-blue-400 font-bold">{type}</p>
-              {terms.map(({ word, reverseTranslation }, i) => <Article key={word}
-                text={word}
-                smallText={reverseTranslation}
-                lang={targetLang}
-                className={i === terms.length - 1 ? '' : 'mb-2'} />)}
-            </Fragment>
-          ))}
+            translation.synonyms.map(({ type, terms }) => (
+              <Fragment key={type}>
+                <p className="text-sm pl-2 text-blue-400 font-bold">{type}</p>
+                {terms.map(({ word, reverseTranslation }, i) =>
+                  <Article key={word}
+                    text={word}
+                    smallText={reverseTranslation}
+                    lang={targetLang}
+                    className={i === terms.length - 1 ? '' : 'mb-2'} />)}
+              </Fragment>
+            ))}
         </div>
       </div>
     </div>

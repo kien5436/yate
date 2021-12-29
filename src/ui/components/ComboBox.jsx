@@ -4,7 +4,7 @@ import { h } from 'preact';
 import '../common/scrollbar';
 import { langs } from '../../background/api';
 
-export default function ComboBox({ className, selectedLang, onLangChange }) {
+export default function ComboBox({ className = '', selectedLang, onLangChange, langType }) {
   const dropdown = useRef(null);
   const langNames = ['Auto detection'].concat(Object.keys(langs).sort());
   const [dedicatedLangs, setDedicatedLangs] = useState(langNames);
@@ -32,7 +32,7 @@ export default function ComboBox({ className, selectedLang, onLangChange }) {
   }
 
   function selectLang(e) {
-    onLangChange(e.target.dataset.langCode || 'auto');
+    onLangChange(e.target.dataset.langCode || 'auto', langType);
   }
 
   function filterLanguage(e) {
@@ -47,7 +47,7 @@ export default function ComboBox({ className, selectedLang, onLangChange }) {
     <div className={`relative ${className}`}>
       <input
         type="text"
-        className="border border-gray-300 rounded px-2 py-1 text-sm w-full transition focus:outline-none focus:border-blue-400"
+        className="border border-gray-300 rounded px-2 py-1 text-sm w-full bg-transparent transition focus:outline-none focus:border-blue-400"
         value={selectedLangName}
         onFocus={toggleDropdown}
         onBlur={toggleDropdown}

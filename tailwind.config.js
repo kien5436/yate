@@ -7,14 +7,15 @@ module.exports = {
     float: false,
   },
   darkMode: 'class',
-  important: '#yate',
+  important: true,
+  mode: 'jit',
   plugins: [],
   purge: {
     content: [
-      './src/**/*.jsx',
+      './src/ui/**/*.jsx',
     ],
     enabled: true,
-    options: { keyframes: true },
+    options: { keyframes: false },
   },
   theme: {
     extend: {
