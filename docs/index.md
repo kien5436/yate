@@ -1,37 +1,50 @@
-## Welcome to GitHub Pages
+# YATE
+Yet another translation extension
 
-You can use the [editor on GitHub](https://github.com/kien5436/yate/edit/gh-pages/docs/index.md) to maintain and preview the content for your website in Markdown files.
+## Build status
+![Build status](https://img.shields.io/badge/build-failed-important?style=flat-square)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Features
+- [x] translate on clicking/selecting/context menu
+- [x] open translation page on popup
 
-### Markdown
+## Installation
+- Firefox
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Go to [AMO](https://addons.mozilla.org/en-US/firefox/addon/yate) page and click "Add to Firefox" button
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+- Chrome
 ```
+coming soon
+```
+- Install from file (Chrome and Edge Chromium)
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+  - Download the latest `.crx` from [this link](https://github.com/shhlkien/yate/releases)
+  - Open `chrome://extensions/` (`edge://extensions`) tab, drag and drop the downloaded file to this page
+  - If you see a message similar "Extensions Disabled", unpack `.crx` file then choose `Load unpacked`
 
-### Jekyll Themes
+## Support me
+<a href="https://www.buymeacoffee.com/kien5436" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kien5436/yate/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## License
+The MIT License
 
-### Support or Contact
+Copyright (c) [Phạm Trung Kiên]()
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
