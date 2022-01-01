@@ -58,5 +58,11 @@
   },
   "loveIt": {
     "message": "I love it"
+  },
+  "placeholderSelectLanguage": {
+    "message": "Type a language"
+  },
+  "placeholderShortcut": {
+    "message": "Type any key combination"
   }
 }

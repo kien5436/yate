@@ -3,7 +3,8 @@
     "INSTRUCTIONS.md": true,
     ".jsbeautifyrc": true,
     "babel.config.json": true,
-    "yarn.lock": true
+    "yarn.lock": true,
+    ".gitattributes": true
   },
   "tailwindCSS.emmetCompletions": true,
   "eslint.format.enable": true,

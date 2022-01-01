@@ -21,13 +21,13 @@ export default function Article({ text, smallText, className = '', lang }) {
 
   return (
     <div className={`flex ${className}`}>
-      <div className="w-11/12 pl-2">
-        <p>{text}</p>
-        {smallText && <p className="text-sm text-gray-600">{smallText}</p>}
+      <div className="w-11/12 pl-3">
+        <p className="dark:text-gray-200">{text}</p>
+        {smallText && <p className="text-sm text-gray-600 dark:text-gray-300">{smallText}</p>}
       </div>
       <div className="px-2">
         <Icon name="feather-volume"
-          className="cursor-pointer"
+          className="cursor-pointer dark:text-gray-200"
           onClick={readText} />
       </div>
     </div>

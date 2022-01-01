@@ -26,26 +26,25 @@
       "background.js"
     ]
   },
-  "content_scripts": [
-    {
-      "all_frames": true,
-      "css": [
-        "659.css",
-        "665.css",
-        "447.css"
-      ],
-      "js": [
-        "659.js",
-        "396.js",
-        "447.js",
-        "context.js"
-      ],
-      "matches": [
-        "*://*/*"
-      ],
-      "run_at": "document_end"
-    }
-  ],
+  "content_scripts": [{
+    "all_frames": true,
+    "css": [
+      "659.css",
+      "486.css"
+    ],
+    "js": [
+      "659.js",
+      "396.js",
+      "400.js",
+      "486.js",
+      "309.js",
+      "context.js"
+    ],
+    "matches": [
+      "*://*/*"
+    ],
+    "run_at": "document_end"
+  }],
   "options_ui": {
     "page": "options.html"
   },

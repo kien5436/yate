@@ -1,13 +1,14 @@
 import 'tailwindcss/tailwind.css';
 import { h, render } from 'preact';
 import { i18n, runtime, storage } from 'webextension-polyfill';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect } from 'preact/hooks';
 
 import '../common/fonts';
-import getSettings, { defaultOptions } from '../../settings';
+import { defaultOptions, extensionUrl } from '../../settings';
 import appIcon from '../../res/icons/96.png';
 import ComboBox from '../components/ComboBox';
 import Icon from '../components/Icon';
+import useSettings from '../hooks/useSettings';
 
 function Control({ children, className = '' }) {
   const [Label, Control] = children;
@@ -35,16 +36,17 @@ function LinkAddons({ className = '', href, text, children }) {
 
 export default function App() {
 
-  const [options, setOptions] = useState(defaultOptions);
+  const [options, setOptions] = useSettings();
 
   useEffect(() => {
 
-    (async () => {
-
-      const syncedOptions = await getSettings();
-      setOptions(syncedOptions);
-    })();
-  }, []);
+    if (options.darkTheme) {
+      document.querySelector('html').classList.add('dark');
+    }
+    else {
+      document.querySelector('html').classList.remove('dark');
+    }
+  }, [options]);
 
   async function setLang(langCode, langType) {
     try {
@@ -90,12 +92,12 @@ export default function App() {
 
   return (
     <div className="max-w-lg p-3 mx-auto">
-      <div className="shadow border border-gray-300 rounded">
+      <div className="shadow border border-gray-300 rounded dark:bg-gray-900 dark:border-gray-700 dark:shadow-dark">
         <a href="https://github.com/kien5436/yate"
           className="flex justify-center items-center p-3">
           <img src={runtime.getURL(appIcon)}
             className="w-8 h-8 mr-3" />
-          <h3>
+          <h3 className="dark:text-gray-200">
             <p className="font-bold text-xl">{i18n.getMessage('extensionName')}</p>
             <p>{i18n.getMessage('description')}</p>
           </h3>
@@ -103,21 +105,21 @@ export default function App() {
         <ul className="p-3">
           <li className="mb-2 text-blue-400 font-bold">{i18n.getMessage('preferences')}</li>
           <Control className="mb-2">
-            <label>{i18n.getMessage('selectSourceLang')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('selectSourceLang')}</label>
             <ComboBox
               langType="sourceLang"
               selectedLang={options.sourceLang}
               onLangChange={setLang} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('selectTargetLang')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('selectTargetLang')}</label>
             <ComboBox
               langType="targetLang"
               selectedLang={options.targetLang}
               onLangChange={setLang} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('displayWithButton')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('displayWithButton')}</label>
             <input type="radio"
               name="translateWithButton"
               defaultChecked={options.translateWithButton}
@@ -126,7 +128,7 @@ export default function App() {
               onChange={onCheckboxChange} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('displayWithoutButton')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('displayWithoutButton')}</label>
             <input type="radio"
               name="translateWithButton"
               defaultChecked={!options.translateWithButton}
@@ -135,7 +137,7 @@ export default function App() {
               onChange={onCheckboxChange} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('autoSwapLanguages')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('autoSwapLanguages')}</label>
             <input type="checkbox"
               name="autoSwapLanguages"
               defaultChecked={options.autoSwapLanguages}
@@ -143,7 +145,7 @@ export default function App() {
               onChange={onCheckboxChange} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('keepHistory')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('keepHistory')}</label>
             <input type="checkbox"
               name="keepHistory"
               defaultChecked={options.keepHistory}
@@ -151,7 +153,7 @@ export default function App() {
               onChange={onCheckboxChange} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('toggleTheme')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('toggleTheme')}</label>
             <input type="checkbox"
               name="darkTheme"
               defaultChecked={options.darkTheme}
@@ -160,23 +162,26 @@ export default function App() {
           </Control>
           <li className="mb-2 text-blue-400 font-bold">{i18n.getMessage('shortcuts')}</li>
           <Control className="mb-2">
-            <label>{i18n.getMessage('defineShortcutPopup')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('defineShortcutPopup')}</label>
             <input type="text"
-              className="border border-gray-300 rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400"
+              className="border border-gray-300 bg-transparent rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700"
+              placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutPopup ? options.shortcutPopup : ''}
               onKeyDown={onKeyDown} />
           </Control>
           <Control className="mb-2">
-            <label>{i18n.getMessage('translateSelectedText')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('translateSelectedText')}</label>
             <input type="text"
-              className="border border-gray-300 rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400"
+              className="border border-gray-300 bg-transparent rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700"
+              placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutSelectedText ? options.shortcutSelectedText : ''}
               onKeyDown={onKeyDown} />
           </Control>
           <Control>
-            <label>{i18n.getMessage('translateFullPage')}</label>
+            <label className="dark:text-gray-200">{i18n.getMessage('translateFullPage')}</label>
             <input type="text"
-              className="border border-gray-300 rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400"
+              className="border border-gray-300 bg-transparent rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700"
+              placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutTranslateFullPage ? options.shortcutTranslateFullPage : ''}
               onKeyDown={onKeyDown} />
           </Control>
@@ -190,13 +195,13 @@ export default function App() {
           </button>
         </div>
       </div>
-      <div className="shadow border border-gray-300 rounded mt-3">
+      <div className="shadow border border-gray-300 rounded mt-3 dark:bg-gray-900 dark:border-gray-700 dark:shadow-dark">
         <div className="flex items-center justify-center p-3">
-          <LinkAddons href=""
+          <LinkAddons href={extensionUrl}
             text={i18n.getMessage('loveIt')}>
-            <Icon name="feather-star" />
+            <Icon name="feather-star-empty" />
           </LinkAddons>
-          <LinkAddons href=""
+          <LinkAddons href="https://github.com/kien5436/yate"
             text={i18n.getMessage('privacy')}
             className="ml-2 mr-2">
             <Icon name="feather-help-circle" />

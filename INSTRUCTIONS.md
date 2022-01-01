@@ -2,8 +2,8 @@
 Yet another translation extension
 
 ## Features
-- [ ] translate on clicking/selecting/context menu
-- [ ] open translation page on popup
+- [x] translate on clicking/selecting/context menu
+- [x] open translation page on popup
 
 ## Build with
 - Ubuntu 20.04 LTS
@@ -14,6 +14,7 @@ Yet another translation extension
 
 ```
 yarn install
-yarn run build
+yarn build-ff
+yarn web-ext-build
 ```
 Then follows [installation guide](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) of Mozilla

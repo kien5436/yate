@@ -25,7 +25,8 @@ export default function Icon({ name, className = '', size = 'default', ...props 
   });
 
   return (
-    <span {...props} className={`inline-flex justify-center items-center w-6 h-6 ${className}`}>
+    <span {...props}
+      className={`inline-flex justify-center items-center w-6 h-6 ${className}`}>
       <i className={iconClass} />
     </span>
   );

@@ -1,15 +1,16 @@
 import { i18n, storage } from "webextension-polyfill";
 import { useEffect, useState } from "preact/hooks";
 
-import getSettings, { defaultOptions } from '../../settings';
+import getSettings from '../../settings';
 import { translate } from "../../background/api";
+import useSettings from "./useSettings";
 
 /**
  * @param {(result: {} | null) => void} setResult
  */
 export default function useTranslation(setResult) {
 
-  const [options, setOptions] = useState(defaultOptions);
+  const [options, setOptions] = useSettings();
   const [sourceLang, setSourceLang] = useState(options.sourceLang);
   const [targetLang, setTargetLang] = useState(options.targetLang);
   const [text, setText] = useState('');
@@ -19,7 +20,6 @@ export default function useTranslation(setResult) {
     (async () => {
 
       const syncedOptions = await getSettings();
-      setOptions(syncedOptions);
       setSourceLang(syncedOptions.sourceLang);
       setTargetLang(syncedOptions.targetLang);
     })();

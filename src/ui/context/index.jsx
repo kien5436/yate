@@ -8,6 +8,7 @@ import '../common/scrollbar';
 import appIcon from '../../res/icons/48.png';
 import Article from '../components/Article';
 import LanguageSelection from '../components/LanguageSelection';
+import useSettings from '../hooks/useSettings';
 import useTranslation from '../hooks/useTranslation';
 
 function MainPanel() {
@@ -15,6 +16,7 @@ function MainPanel() {
   const popBtn = useRef(null);
   /** @type import('preact/hooks').MutableRef<HTMLElement> */
   const popPanel = useRef(null);
+  const [options] = useSettings();
   const [translation, setTranslation] = useState({});
   const {
     setSourceLang,
@@ -26,51 +28,65 @@ function MainPanel() {
   } = useTranslation((result) => setTranslation(null !== result ? result : {}));
 
   useEffect(() => {
+
     /** @param {MouseEvent} e */
     function showTranslationPopup(e) {
 
       if (null !== e.target.closest('#yate')) return;
 
-      showTranslationPanel(e);
+      const selectedText = window.getSelection().toString()
+        .trim();
+
+      if ('' === selectedText) {
+
+        popBtn.current.classList.add('hidden');
+        popPanel.current.classList.add('hidden');
+        return;
+      }
+      console.info('index.jsx:47: ', selectedText);
+
+      if (options.translateWithButton) {
+        showTranslationButton(e);
+      }
+      else {
+        showTranslationPanel(e, selectedText);
+      }
     }
 
     /** @param {MouseEvent} e */
     function showTranslationButton(e) {
-      popBtn.current.style.setProperty('left', `${e.clientX}px`);
-      popBtn.current.style.setProperty('top', `${e.clientY}px`);
+      popBtn.current.style.setProperty('left', `${e.pageX}px`);
+      popBtn.current.style.setProperty('top', `${e.pageY}px`);
       popBtn.current.classList.remove('hidden');
     }
 
     /** @param {MouseEvent} e */
-    function showTranslationPanel(e) {
+    function showTranslationPanel(e, selectedText) {
 
-      const selectedText = window.getSelection().toString();
+      options.translateWithButton && popBtn.current.classList.add('hidden');
+      console.info('index.jsx:74:   ', selectedText);
 
       setText(selectedText);
-
-      if ('' === selectedText) {
-
-        popPanel.current.classList.add('hidden');
-        return;
-      }
 
       popPanel.current.style.setProperty('left', `${e.pageX}px`);
       popPanel.current.style.setProperty('top', `${e.pageY}px`);
       popPanel.current.classList.remove('hidden');
     }
-
     document.addEventListener('mouseup', showTranslationPopup, false);
 
     return () => document.removeEventListener('mouseup', showTranslationPopup, false);
-  }, [setText]);
+  }, [options.translateWithButton, setText]);
 
   return (
-    <div id="yate">
-      <img ref={popBtn}
-        src={runtime.getURL(appIcon)}
-        className="absolute cursor-pointer overflow-hidden border border-gray-300 rounded-sm w-7 h-7 z-max p-0.5 bg-white hidden" />
+    <div id="yate"
+      className="dark">
+      {options.translateWithButton &&
+        <img ref={popBtn}
+          src={runtime.getURL(appIcon)}
+          className="absolute cursor-pointer overflow-hidden border border-gray-300 rounded-sm w-6 h-6 z-max p-0.5 bg-white hidden"
+        />}
       <div ref={popPanel}
-        className="absolute w-64 h-64 overflow-hidden bg-white rounded shadow z-max text-base text-gray-800 hidden">
+        className="absolute w-64 h-64 overflow-hidden bg-white rounded shadow z-max text-base text-gray-800 hidden dark:bg-gray-900 dark:shadow-dark">
         <div className="shadow">
           <LanguageSelection className="p-2"
             sourceLang={sourceLang}

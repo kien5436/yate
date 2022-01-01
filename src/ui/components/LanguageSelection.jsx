@@ -12,7 +12,7 @@ export default function LanguageSelection({ sourceLang, setSourceLang, targetLan
         onLangChange={setSourceLang} />
       <div className="flex-none w-1/12 text-center">
         <Icon name="feather-swap"
-          className="cursor-pointer rounded transition-colors hover:bg-gray-100"
+          className="cursor-pointer rounded transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
           onClick={swapLanguage} />
       </div>
       <ComboBox className="flex-auto"

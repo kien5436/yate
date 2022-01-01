@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { h } from 'preact';
+import { i18n } from 'webextension-polyfill';
 
 import '../common/scrollbar';
 import { langs } from '../../background/api';
@@ -47,18 +48,19 @@ export default function ComboBox({ className = '', selectedLang, onLangChange, l
     <div className={`relative ${className}`}>
       <input
         type="text"
-        className="border border-gray-300 rounded px-2 py-1 text-sm w-full bg-transparent transition focus:outline-none focus:border-blue-400"
+        className="border border-gray-300 rounded px-2 py-1 text-sm w-full bg-transparent transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700 dark:focus:border-blue-400"
+        placeholder={i18n.getMessage('placeholderSelectLanguage')}
         value={selectedLangName}
         onFocus={toggleDropdown}
         onBlur={toggleDropdown}
         onInput={filterLanguage}
       />
-      <div className="absolute left-0 top-6 w-full rounded-b shadow-md bg-white max-h-40 overflow-hidden z-10 border-b border-r border-l border-blue-400 hidden"
+      <div className="absolute left-0 top-6 w-full rounded-b shadow-md bg-white max-h-40 overflow-hidden z-10 border-b border-r border-l border-blue-400 hidden dark:bg-gray-900"
         ref={dropdown}>
         <ul className="py-1 max-h-40 overflow-y-auto has-scrollbar text-sm">
           {
             dedicatedLangs.map((name) => <li key={name}
-              className="w-full whitespace-nowrap py-1 5 px-4 cursor-default transition-colors hover:bg-blue-400 hover:text-gray-50"
+              className="w-full whitespace-nowrap py-1 5 px-4 cursor-default transition-colors hover:bg-blue-400 hover:text-gray-50 dark:text-gray-200 dark:hover:bg-blue-600"
               data-lang-code={langs[name]}
               onMouseDown={selectLang}>{name}</li>)
           }

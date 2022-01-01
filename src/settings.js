@@ -23,3 +23,35 @@ export default async function getSettings() {
     return defaultOptions;
   }
 }
+
+export const extensionUrl = 'firefox' === ua() ? 'https://addons.mozilla.org/en-US/firefox/addon/yate/' : '';
+
+function ua() {
+  if (-1 !== navigator.userAgent.indexOf("Chrome") ) {
+    return 'chromium';
+  }
+  // FIREFOX
+  else if (-1 !== navigator.userAgent.indexOf("Firefox") ) {
+    return 'firefox';
+  }
+  // EDGE
+  else if (-1 !== navigator.userAgent.indexOf("Edge") ) {
+    return 'edge';
+  }
+  // SAFARI
+  else if (-1 !== navigator.userAgent.indexOf("Safari") ) {
+    return 'safari';
+  }
+  // OPERA
+  else if (-1 !== navigator.userAgent.indexOf("Opera") ) {
+    return 'opera';
+  }
+  // YANDEX BROWSER
+  else if (-1 !== navigator.userAgent.indexOf("YaBrowser") ) {
+    return 'yandex';
+  }
+  // OTHERS
+
+  return 'others';
+
+}

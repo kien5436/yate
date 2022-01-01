@@ -51,10 +51,6 @@ body {
   content: "\e904";
 }
 
-.feather-star:before {
-  content: "\e906";
-}
-
 .feather-swap:before {
   content: "\e902";
 }
@@ -69,4 +65,12 @@ body {
 
 .feather-x:before {
   content: "\e905";
+}
+
+.feather-star-empty:before {
+  content: "\e9d7";
+}
+
+.feather-star-full:before {
+  content: "\e9d9";
 }

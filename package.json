@@ -7,11 +7,11 @@
   "scripts": {
     "build-ff": "cross-env BROWSER=firefox webpack",
     "build-chrome": "cross-env BROWSER=chrome webpack",
-    "pack-src": "zip -r -FS source.zip src INSTRUCTIONS.md package.json webpack.config.js yarn.lock",
+    "pack-src": "zip -r -FS source.zip src INSTRUCTIONS.md package.json webpack.config.js yarn.lock tailwind.config.js",
     "release": "yarn build-ff && yarn web-ext-build && yarn pack-src",
     "release-chrome": "yarn build-chrome && google-chrome --pack-extension=./built --pack-extension-key=./built.pem --disable-setuid-sandbox",
     "web-ext-build": "web-ext build -s built -a . -o",
-    "web-ext-dev": "web-ext run -s built -p dev -f \"C:\\Program Files\\Firefox Developer Edition\\firefox.exe\"",
+    "web-ext-dev": "web-ext run -s built -p dev",
     "web-ext-lint": "web-ext lint -s built"
   },
   "devDependencies": {

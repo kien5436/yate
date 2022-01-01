@@ -28,5 +28,6 @@ function onClick({ menuItemId }, { url }) {
   }
   else if ('translateSelectedText' === menuItemId ) {
 
+
   }
 }
