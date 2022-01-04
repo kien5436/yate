@@ -6,18 +6,20 @@ import Icon from './Icon';
 
 export default function LanguageSelection({ sourceLang, setSourceLang, targetLang, setTargetLang, swapLanguage, className = '' }) {
   return (
-    <div className={`flex justify-center items-center h-11 ${className}`}>
+    <div className={`flex justify-between items-center h-11 space-x-1 ${className}`}>
       <ComboBox className="flex-auto"
-        selectedLang={sourceLang}
-        onLangChange={setSourceLang} />
-      <div className="flex-none w-1/12 text-center">
+        defaultLang={sourceLang}
+        onLangChange={setSourceLang}
+        langType="sourceLang" />
+      <div className="flex-none max-w-min text-center">
         <Icon name="feather-swap"
           className="cursor-pointer rounded transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
           onClick={swapLanguage} />
       </div>
       <ComboBox className="flex-auto"
-        selectedLang={targetLang}
-        onLangChange={setTargetLang} />
+        defaultLang={targetLang}
+        onLangChange={setTargetLang}
+        langType="targetLang" />
     </div>
   );
 }

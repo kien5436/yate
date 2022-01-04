@@ -1,19 +1,19 @@
 /* eslint-disable sort-keys */
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { resolve } = require('path');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-// const TerserJSPlugin = require('terser-webpack-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
 
 /** @type import('webpack').Configuration */
 module.exports = {
   mode: 'production',
   entry: {
     popup: './src/ui/popup/index.jsx',
-    context: './src/ui/context/index.jsx',
+    context: './src/ui/context.jsx',
     background: './src/background/index.js',
     options: './src/ui/options-page/index.jsx',
   },
@@ -23,40 +23,41 @@ module.exports = {
     path: resolve('built'),
   },
   module: {
-    rules: [{
-      test: /\.jsx$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: { cacheDirectory: true },
-      },
-    },
-    {
-      test: /\.css$/,
-      use: [
-        MiniCssExtractPlugin.loader,
-        {
-          loader: 'css-loader',
-          options: { url: false },
+    rules: [
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: { cacheDirectory: true },
         },
-        {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: {
-                tailwindcss: { config: resolve('tailwind.config.js') },
-                autoprefixer: {},
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { url: false },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: {
+                  tailwindcss: { config: resolve('tailwind.config.js') },
+                  autoprefixer: {},
+                },
               },
             },
           },
-        },
-      ],
-    },
-    {
-      test: /\.png$/,
-      type: 'asset/resource',
-      generator: { filename: 'res/icons/[name][ext]' },
-    },
+        ],
+      },
+      {
+        test: /\.png$/,
+        type: 'asset/resource',
+        generator: { filename: 'res/icons/[name][ext]' },
+      },
     ],
   },
   plugins: [
@@ -115,24 +116,10 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
       minSize: 0,
-      // name(module) {
-      //   return module.context.includes('node_modules') ?
-      //     (module.context.includes('preact') ? 'libs/preact' : 'libs/common') :
-      //     'libs/utils';
-      // },
-      // cacheGroups: {
-      //   background: {
-      //     name: 'background',
-      //   }
-      // },
     },
     minimizer: [
-      // new TerserJSPlugin({
-      //   cache: true,
-      //   parallel: true,
-      //   extractComments: false,
-      // }),
-      // new OptimizeCSSAssetsPlugin({ cssProcessorPluginOptions: { preset: ['default', { discardComments: { removeAll: true } }] } }),
+      new TerserJSPlugin({ extractComments: false }),
+      new CssMinimizerPlugin({ minimizerOptions: { preset: ['default', { discardComments: { removeAll: true } }] } }),
     ],
   },
   resolve: { extensions: ['.js', '.jsx', '.css'] },

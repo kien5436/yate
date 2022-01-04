@@ -1,23 +1,26 @@
 import 'tailwindcss/tailwind.css';
 import { Fragment, h, render } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { runtime } from 'webextension-polyfill';
 
-import '../common/fonts';
-import '../common/scrollbar';
-import appIcon from '../../res/icons/48.png';
-import Article from '../components/Article';
-import LanguageSelection from '../components/LanguageSelection';
-import useSettings from '../hooks/useSettings';
-import useTranslation from '../hooks/useTranslation';
+import './common/fonts';
+import './common/scrollbar';
+import appIcon from '../res/icons/48.png';
+import Article from './components/Article';
+import LanguageSelection from './components/LanguageSelection';
+import useSettings from './hooks/useSettings';
+import useTranslation from './hooks/useTranslation';
 
 function MainPanel() {
+  /** @type import('preact/hooks').MutableRef<HTMLElement> */
+  const root = useRef(null);
   /** @type import('preact/hooks').MutableRef<HTMLElement> */
   const popBtn = useRef(null);
   /** @type import('preact/hooks').MutableRef<HTMLElement> */
   const popPanel = useRef(null);
   const [options] = useSettings();
   const [translation, setTranslation] = useState({});
+  const setResult = useCallback((result) => setTranslation(result ? result : {}), []);
   const {
     setSourceLang,
     setTargetLang,
@@ -25,7 +28,18 @@ function MainPanel() {
     sourceLang,
     targetLang,
     text,
-  } = useTranslation((result) => setTranslation(null !== result ? result : {}));
+  } = useTranslation(setResult);
+  const showTranslationPanel = useCallback((e, selectedText = window.getSelection().toString()
+    .trim()) => {
+
+    options.translateWithButton && popBtn.current.classList.add('hidden');
+
+    setText(selectedText);
+
+    popPanel.current.style.setProperty('left', `${e.pageX}px`);
+    popPanel.current.style.setProperty('top', `${e.pageY}px`);
+    popPanel.current.classList.remove('hidden');
+  }, [options.translateWithButton, setText]);
 
   useEffect(() => {
 
@@ -43,7 +57,6 @@ function MainPanel() {
         popPanel.current.classList.add('hidden');
         return;
       }
-      console.info('index.jsx:47: ', selectedText);
 
       if (options.translateWithButton) {
         showTranslationButton(e);
@@ -60,30 +73,20 @@ function MainPanel() {
       popBtn.current.classList.remove('hidden');
     }
 
-    /** @param {MouseEvent} e */
-    function showTranslationPanel(e, selectedText) {
-
-      options.translateWithButton && popBtn.current.classList.add('hidden');
-      console.info('index.jsx:74:   ', selectedText);
-
-      setText(selectedText);
-
-      popPanel.current.style.setProperty('left', `${e.pageX}px`);
-      popPanel.current.style.setProperty('top', `${e.pageY}px`);
-      popPanel.current.classList.remove('hidden');
-    }
     document.addEventListener('mouseup', showTranslationPopup, false);
 
     return () => document.removeEventListener('mouseup', showTranslationPopup, false);
-  }, [options.translateWithButton, setText]);
+  }, [options.translateWithButton, showTranslationPanel]);
 
   return (
     <div id="yate"
-      className="dark">
+      ref={root}
+      className={options.darkTheme ? 'dark' : ''}>
       {options.translateWithButton &&
         <img ref={popBtn}
           src={runtime.getURL(appIcon)}
-          className="absolute cursor-pointer overflow-hidden border border-gray-300 rounded-sm w-6 h-6 z-max p-0.5 bg-white hidden"
+          className="absolute cursor-pointer overflow-hidden border border-gray-300 rounded-sm w-6 h-6 z-max p-0.5 bg-white hidden dark:bg-gray-900"
+          onClick={showTranslationPanel}
         />}
       <div ref={popPanel}
         className="absolute w-64 h-64 overflow-hidden bg-white rounded shadow z-max text-base text-gray-800 hidden dark:bg-gray-900 dark:shadow-dark">

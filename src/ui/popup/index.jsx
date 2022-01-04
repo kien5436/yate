@@ -1,7 +1,7 @@
 import 'tailwindcss/tailwind.css';
 import { h, render } from 'preact';
 import { i18n, runtime, tabs } from 'webextension-polyfill';
-import { useEffect, useState } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 
 import '../common/fonts';
 import appIcon from '../../res/icons/48.png';
@@ -15,6 +15,7 @@ import useTranslation from '../hooks/useTranslation';
 function App() {
   const [options] = useSettings();
   const [translatedText, setTranslatedText] = useState('');
+  const setResult = useCallback((result) => setTranslatedText(result ? result.trans : ''), []);
   const {
     setSourceLang,
     setTargetLang,
@@ -22,7 +23,7 @@ function App() {
     sourceLang,
     targetLang,
     text,
-  } = useTranslation((result) => setTranslatedText(result ? result.trans : ''));
+  } = useTranslation(setResult);
 
   useEffect(() => {
 

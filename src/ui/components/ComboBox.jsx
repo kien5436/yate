@@ -1,46 +1,55 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { h } from 'preact';
 import { i18n } from 'webextension-polyfill';
 
 import '../common/scrollbar';
 import { langs } from '../../background/api';
 
-export default function ComboBox({ className = '', selectedLang, onLangChange, langType }) {
+export default function ComboBox({ className = '', defaultLang, onLangChange, langType }) {
+
   const dropdown = useRef(null);
-  const langNames = ['Auto detection'].concat(Object.keys(langs).sort());
+  const langNames = useMemo(() => {
+
+    const names = Object.keys(langs).sort();
+    const autoLang = names.splice(names.indexOf('Auto detection'), 1);
+
+    return 'sourceLang' === langType ? autoLang.concat(names) : names;
+  }, [langType]);
   const [dedicatedLangs, setDedicatedLangs] = useState(langNames);
   const [selectedLangName, setSelectedLangName] = useState('');
+  const [typing, setTypeStatus] = useState(false);
+  const [input, setInput] = useState('');
 
-  useEffect(() => {
+  useEffect(() => setSelectedLangName(getLangName(defaultLang)), [defaultLang]);
 
-    if ('auto' === selectedLang) {
-
-      setSelectedLangName('Auto detection');
-      return;
-    }
+  function getLangName(langCode) {
 
     for (const lang in langs) {
-      if (langs.hasOwnProperty(lang) && langs[lang] === selectedLang) {
-        setSelectedLangName(lang);
-        break;
+      if (langs.hasOwnProperty(lang) && langs[lang] === langCode) {
+
+        return lang;
       }
     }
-  }, [selectedLang]);
 
-  /** @param {Event} e */
-  function toggleDropdown(e) {
+    return '';
+  }
+
+  function toggleDropdown() {
+
+    setTypeStatus(!typing);
+    setInput(selectedLangName);
     dropdown.current.classList.toggle('hidden');
   }
 
   function selectLang(e) {
-    onLangChange(e.target.dataset.langCode || 'auto', langType);
+    onLangChange(e.target.dataset.langCode, langType);
   }
 
   function filterLanguage(e) {
     const value = e.target.value.trim().toLowerCase();
     const filtered = langNames.filter((lang) => lang.toLowerCase().includes(value));
 
-    setSelectedLangName(e.target.value);
+    setInput(e.target.value);
     setDedicatedLangs(filtered);
   }
 
@@ -48,9 +57,10 @@ export default function ComboBox({ className = '', selectedLang, onLangChange, l
     <div className={`relative ${className}`}>
       <input
         type="text"
-        className="border border-gray-300 rounded px-2 py-1 text-sm w-full bg-transparent transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700 dark:focus:border-blue-400"
+        className="border border-gray-300 rounded px-2 py-1 text-sm w-full bg-transparent max-h-8 transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700 dark:focus:border-blue-400"
         placeholder={i18n.getMessage('placeholderSelectLanguage')}
-        value={selectedLangName}
+        defaultValue={selectedLangName}
+        value={typing ? input : selectedLangName}
         onFocus={toggleDropdown}
         onBlur={toggleDropdown}
         onInput={filterLanguage}

@@ -10,6 +10,7 @@ export const langs = {
   Amharic: 'am',
   Arabic: 'ar',
   Armenian: 'hy',
+  'Auto detection': 'auto',
   Azerbaijani: 'az',
   Basque: 'eu',
   Belarusian: 'be',
@@ -224,7 +225,7 @@ function buildRequestUrl(text, sourceLang, targetLang, fallback = false) {
  */
 function getResult(data) {
 
-  const { sentences, dict } = data;
+  const { sentences, dict, src } = data;
   /**
    * @type {{
    *  trans: string,
@@ -235,10 +236,11 @@ function getResult(data) {
    *      word: string,
    *      reverseTranslation: string
    *    }>
-   *  }>
+   *  }>,
+   *  sourceLang: string
    * }}
    */
-  const result = {};
+  const result = { sourceLang: src };
 
   if (undefined === dict) {
     let trans = '';

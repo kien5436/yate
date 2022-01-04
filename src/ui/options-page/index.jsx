@@ -49,6 +49,7 @@ export default function App() {
   }, [options]);
 
   async function setLang(langCode, langType) {
+
     try {
       await storage.sync.set({ [langType]: langCode });
       setOptions({ ...options, [langType]: langCode });
@@ -108,14 +109,14 @@ export default function App() {
             <label className="dark:text-gray-200">{i18n.getMessage('selectSourceLang')}</label>
             <ComboBox
               langType="sourceLang"
-              selectedLang={options.sourceLang}
+              defaultLang={options.sourceLang}
               onLangChange={setLang} />
           </Control>
           <Control className="mb-2">
             <label className="dark:text-gray-200">{i18n.getMessage('selectTargetLang')}</label>
             <ComboBox
               langType="targetLang"
-              selectedLang={options.targetLang}
+              defaultLang={options.targetLang}
               onLangChange={setLang} />
           </Control>
           <Control className="mb-2">

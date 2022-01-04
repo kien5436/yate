@@ -50,5 +50,16 @@
   },
   "web_accessible_resources": [
     "res/*"
-  ]
+  ],
+  "commands": {
+    "_execute_browser_action": {
+      "description": "__MSG_openPopup__"
+    },
+    "translateSelectedText": {
+      "description": "__MSG_translateSelectedText__"
+    },
+    "translateFullPage": {
+      "description": "__MSG_translateFullPage__"
+    }
+  }
 }

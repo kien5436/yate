@@ -28,9 +28,24 @@ export default function useTranslation(setResult) {
   useEffect(() => {
     (async () => {
       try {
-        if ('' !== text.trim()) {
+        const sourceText = text.trim();
 
-          const result = await translate(text.trim(), sourceLang, targetLang);
+        if ('' !== sourceText ) {
+
+          const result = await translate(sourceText, sourceLang, targetLang);
+          console.info('useTranslation.js:36: ', result);
+
+          if (result.sourceLang && 'auto' === sourceLang) {
+            setSourceLang(result.sourceLang);
+          }
+
+          if (options.autoSwapLanguages && 'auto' !== sourceLang && result.sourceLang === targetLang) {
+
+            const tmp = sourceLang;
+
+            setSourceLang(targetLang);
+            setTargetLang(tmp);
+          }
 
           setResult(result);
         }
@@ -43,19 +58,11 @@ export default function useTranslation(setResult) {
         setResult(i18n.getMessage('serviceUnavailable'));
       }
     })();
-  }, [setResult, sourceLang, targetLang, text]);
+  }, [sourceLang, targetLang, text]);
 
-  useEffect(() => {
+  useEffect(() => setOptions((prevOptions) => ({ ...prevOptions, sourceLang })), [setOptions, sourceLang]);
 
-    setOptions((prevOptions) => ({ ...prevOptions, sourceLang }));
-    storage.sync.set({ sourceLang });
-  }, [sourceLang]);
-
-  useEffect(() => {
-
-    setOptions((prevOptions) => ({ ...prevOptions, targetLang }));
-    storage.sync.set({ targetLang });
-  }, [targetLang]);
+  useEffect(() => setOptions((prevOptions) => ({ ...prevOptions, targetLang })), [setOptions, targetLang]);
 
   return {
     setSourceLang,
