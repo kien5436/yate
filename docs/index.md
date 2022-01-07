@@ -21,7 +21,7 @@ Easy settings with beautiful dark mode
 
 Light theme | Dark theme
 :---:|:---:
-<img src="./assets/light.PNG" alt="light" style="width: 50%"> | <img src="./assets/dark.PNG" alt="light" style="width: 50%">
+<img src="./assets/light.PNG" alt="light" style="height: 400px"> | <img src="./assets/dark.PNG" alt="light" style="height: 400px">
 
 ## Installation
 - Firefox

@@ -202,12 +202,12 @@ export default function App() {
             text={i18n.getMessage('loveIt')}>
             <Icon name="feather-star-empty" />
           </LinkAddons>
-          <LinkAddons href="https://github.com/kien5436/yate"
+          <LinkAddons href="https://kien5436.github.io/yate/privacy.html"
             text={i18n.getMessage('privacy')}
             className="ml-2 mr-2">
             <Icon name="feather-help-circle" />
           </LinkAddons>
-          <LinkAddons href="https://github.com/kien5436/yate"
+          <LinkAddons href="https://kien5436.github.io/yate/"
             text="Github">
             <Icon name="feather-github" />
           </LinkAddons>

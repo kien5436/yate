@@ -3,7 +3,8 @@ Yet another translation extension
 
 ## Features
 - [x] translate on clicking/selecting/context menu
-- [x] open translation page on popup
+- [x] translate on popup
+- [x] full page translation
 
 ## Build with
 - Ubuntu 20.04 LTS
