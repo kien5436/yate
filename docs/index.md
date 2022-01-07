@@ -1,17 +1,34 @@
+<img src="./assets/96.png" align="left" height="96px" style="margin-right:10px">
+
 # YATE
 Yet another translation extension
 
-## Build status
-![Build status](https://img.shields.io/badge/build-failed-important?style=flat-square)
-
 ## Features
+
+A lightweight and fast translation extension, no ads, no payment required
+
 - [x] translate on clicking/selecting/context menu
-- [x] open translation page on popup
+- [x] translate on popup
+- [x] full page translation
+
+Convenient way to translate while browsing
+
+![popup](./assets/popup.PNG)
+
+![in page](./assets/in-page.PNG)
+
+Easy settings with beautiful dark mode
+
+Light theme | Dark theme
+:---:|:---:
+<img src="./assets/light.PNG" alt="light" style="width: 50%"> | <img src="./assets/dark.PNG" alt="light" style="width: 50%">
 
 ## Installation
 - Firefox
 
-Go to [AMO](https://addons.mozilla.org/en-US/firefox/addon/yate) page and click "Add to Firefox" button
+<a href="https://addons.mozilla.org/en-US/firefox/addon/yate">
+  <img src="./assets/firefox.png" alt="firefox" style="height: 60px" >
+</a>
 
 - Chrome
 ```
@@ -23,8 +40,16 @@ coming soon
   - Open `chrome://extensions/` (`edge://extensions`) tab, drag and drop the downloaded file to this page
   - If you see a message similar "Extensions Disabled", unpack `.crx` file then choose `Load unpacked`
 
+## Got a problem?
+
+If you find any problem or want to request a feature, please post it [here](https://github.com/kien5436/yate/issues)
+
 ## Support me
-<a href="https://www.buymeacoffee.com/kien5436" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/kien5436" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px;width: 217px;" ></a>
+
+## Privacy policy
+
+[Privacy](./privacy.md)
 
 ## License
 The MIT License

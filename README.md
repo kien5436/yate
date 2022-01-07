@@ -2,16 +2,19 @@
 Yet another translation extension
 
 ## Build status
-![Build status](https://img.shields.io/badge/build-failed-important?style=flat-square)
+![Build status](https://img.shields.io/badge/build-passing-success?style=flat-square)
 
 ## Features
-- [ ] translate on clicking/selecting/context menu
-- [ ] open translation page on popup
+- [x] translate on clicking/selecting/context menu
+- [x] translate on popup
+- [x] full page translation
 
 ## Installation
 - Firefox
 
-Go to [AMO](https://addons.mozilla.org/en-US/firefox/addon/yate) page and click "Add to Firefox" button
+<a href="https://addons.mozilla.org/en-US/firefox/addon/yate">
+  <img src="./docs/assets/firefox.png" alt="firefox" style="height: 60px" >
+</a>
 
 - Chrome
 ```
