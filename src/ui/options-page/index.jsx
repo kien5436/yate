@@ -161,7 +161,7 @@ export default function App() {
               checked={options.darkTheme}
               onChange={onCheckboxChange} />
           </Control>
-          <li className="mb-2 text-blue-400 font-bold">{i18n.getMessage('shortcuts')}</li>
+          {/* <li className="mb-2 text-blue-400 font-bold">{i18n.getMessage('shortcuts')}</li>
           <Control className="mb-2">
             <label className="dark:text-gray-200">{i18n.getMessage('defineShortcutPopup')}</label>
             <input type="text"
@@ -185,7 +185,7 @@ export default function App() {
               placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutTranslateFullPage ? options.shortcutTranslateFullPage : ''}
               onKeyDown={onKeyDown} />
-          </Control>
+          </Control> */}
         </ul>
         <div className="flex justify-center p-3">
           <button type="button"

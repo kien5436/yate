@@ -225,7 +225,7 @@ function buildRequestUrl(text, sourceLang, targetLang, fallback = false) {
  */
 function getResult(data) {
 
-  const { sentences, dict, src } = data;
+  const { sentences, dict, ld_result: { srclangs } } = data;
   /**
    * @type {{
    *  trans: string,
@@ -240,7 +240,7 @@ function getResult(data) {
    *  sourceLang: string
    * }}
    */
-  const result = { sourceLang: src };
+  const result = { sourceLang: srclangs[0] };
 
   if (undefined === dict) {
     let trans = '';

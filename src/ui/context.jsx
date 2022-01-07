@@ -60,6 +60,8 @@ function MainPanel() {
 
       if (options.translateWithButton) {
         showTranslationButton(e);
+        setTimeout(() => popBtn.current.classList.add('hidden')
+          , 2000);
       }
       else {
         showTranslationPanel(e, selectedText);
@@ -89,7 +91,7 @@ function MainPanel() {
           onClick={showTranslationPanel}
         />}
       <div ref={popPanel}
-        className="absolute w-64 h-64 overflow-hidden bg-white rounded shadow z-max text-base text-gray-800 hidden dark:bg-gray-900 dark:shadow-dark">
+        className="absolute w-64 max-h-64 overflow-hidden bg-white rounded shadow z-max text-base text-gray-800 hidden dark:bg-gray-900 dark:shadow-dark">
         <div className="shadow">
           <LanguageSelection className="p-2"
             sourceLang={sourceLang}
@@ -98,14 +100,15 @@ function MainPanel() {
             setTargetLang={setTargetLang} />
         </div>
         <div className="has-scrollbar overflow-auto py-3"
-          style={{ maxHeight: 'calc(100% - 2.75rem)' }}>
-          <Article text={text}
+          style={{ maxHeight: 'calc(16rem - 2.75rem)' }}>
+          {translation.error && <p className="text-sm text-gray-600 dark:text-gray-300 px-2">{translation.error}</p>}
+          {translation.spelling && <Article text={text}
             smallText={translation.spelling}
             className="mb-2"
-            lang={sourceLang} />
-          <Article text={translation.trans}
+            lang={sourceLang} />}
+          {translation.trans && <Article text={translation.trans}
             className="mb-2"
-            lang={targetLang} />
+            lang={targetLang} />}
           {translation.synonyms &&
             translation.synonyms.map(({ type, terms }) => (
               <Fragment key={type}>

@@ -1,6 +1,6 @@
 import 'tailwindcss/tailwind.css';
 import { h, render } from 'preact';
-import { i18n, runtime, tabs } from 'webextension-polyfill';
+import { i18n, runtime, storage, tabs } from 'webextension-polyfill';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 
 import '../common/fonts';
@@ -15,7 +15,7 @@ import useTranslation from '../hooks/useTranslation';
 function App() {
   const [options] = useSettings();
   const [translatedText, setTranslatedText] = useState('');
-  const setResult = useCallback((result) => setTranslatedText(result ? result.trans : ''), []);
+  const setResult = useCallback((result) => setTranslatedText(result ? (result.error ? result.error : result.trans) : ''), []);
   const {
     setSourceLang,
     setTargetLang,
@@ -30,7 +30,44 @@ function App() {
     if (options.darkTheme) {
       document.querySelector('html').classList.add('dark');
     }
-  }, [options]);
+  }, [options.darkTheme]);
+
+  useEffect(() => {
+
+    (async () => {
+
+      if (options.keepHistory) {
+
+        try {
+          const { popupText } = await storage.local.get('popupText');
+
+          if (undefined !== popupText) {
+            setText(popupText);
+          }
+        }
+        catch (err) {
+          console.error('index.jsx:52:', err);
+        }
+      }
+
+    })();
+  }, [options.keepHistory, setText]);
+
+  useEffect(() => {
+
+    (async () => {
+
+      if (options.keepHistory) {
+
+        try {
+          await storage.local.set({ popupText: text });
+        }
+        catch (err) {
+          console.error('index.jsx:65:', err);
+        }
+      }
+    })();
+  }, [options.keepHistory, text]);
 
   function swapLanguage() {
     const tmp = sourceLang;
