@@ -1,0 +1,20 @@
+{
+  "files.exclude": {
+    "INSTRUCTIONS.md": true,
+    ".jsbeautifyrc": true,
+    "babel.config.json": true,
+    "yarn.lock": true,
+    ".gitattributes": true
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "eslint.format.enable": true,
+  "eslint.packageManager": "yarn",
+  "beautify.ignore": [
+    ".vscode/**",
+    "built/**",
+    "node_modules/**"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+  }
+}

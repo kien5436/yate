@@ -1,0 +1,71 @@
+{
+  "extensionName": {
+    "message": "Yate"
+  },
+  "description": {
+    "message": "Yet another translation extension"
+  },
+  "serviceUnavailable": {
+    "message": "Service is unavailable. Please try again in at least a minute"
+  },
+  "translateFullPage": {
+    "message": "Translate this page"
+  },
+  "translateSelectedText": {
+    "message": "Translate selected text"
+  },
+  "selectTargetLang": {
+    "message": "Select target language"
+  },
+  "selectSourceLang": {
+    "message": "Select source language"
+  },
+  "toggleTheme": {
+    "message": "Dark theme"
+  },
+  "displayWithButton": {
+    "message": "Display translation button when selected text"
+  },
+  "displayWithoutButton": {
+    "message": "Display translation panel when selected text"
+  },
+  "autoSwapLanguages": {
+    "message": "Automatically swap languages"
+  },
+  "keepHistory": {
+    "message": "Keep translation in pop-up"
+  },
+  "defineShortcutPopup": {
+    "message": "Open toolbar pop-up"
+  },
+  "resetSettingsTooltip": {
+    "message": "Restore to default settings"
+  },
+  "resetSettings": {
+    "message": "Reset"
+  },
+  "settingsTooltip": {
+    "message": "Settings"
+  },
+  "preferences": {
+    "message": "Preferences"
+  },
+  "shortcuts": {
+    "message": "Shortcuts"
+  },
+  "privacy": {
+    "message": "Privacy policy"
+  },
+  "loveIt": {
+    "message": "I love it"
+  },
+  "placeholderSelectLanguage": {
+    "message": "Type a language"
+  },
+  "placeholderShortcut": {
+    "message": "Type a shortcut"
+  },
+  "openPopup": {
+    "message": "Open translation panel"
+  }
+}

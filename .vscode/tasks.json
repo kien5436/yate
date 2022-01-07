@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev",
+      "dependsOn": [
+        "build-firefox-dev",
+        "web-ext-dev"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "command": "yarn build-ff --watch",
+      "problemMatcher": [],
+      "label": "build-firefox-dev",
+      "detail": "cross-env BROWSER=firefox webpack --watch",
+      "group": "build",
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "group": "dev"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "yarn build-chrome --watch",
+      "problemMatcher": [],
+      "label": "build-chrome-dev",
+      "detail": "cross-env BROWSER=chrome webpack --watch",
+      "group": "build",
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "group": "dev"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "web-ext-dev",
+      "problemMatcher": [],
+      "label": "web-ext-dev",
+      "detail": "web-ext run -s built -p dev",
+      "group": "build",
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "group": "dev"
+      }
+    }
+  ]
+}

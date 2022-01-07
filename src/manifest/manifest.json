@@ -1,0 +1,65 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_description__",
+  "author": "Phạm Trung Kiên",
+  "icons": {
+    "48": "res/icons/48.png",
+    "96": "res/icons/96.png",
+    "128": "res/icons/128.png"
+  },
+  "default_locale": "en",
+  "permissions": [
+    "<all_urls>",
+    "storage",
+    "tabs",
+    "contextMenus"
+  ],
+  "browser_action": {
+    "default_icon": "res/icons/48.png",
+    "default_title": "__MSG_extensionName__",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": [
+      "150.js",
+      "background.js"
+    ]
+  },
+  "content_scripts": [{
+    "all_frames": true,
+    "css": [
+      "659.css",
+      "486.css"
+    ],
+    "js": [
+      "659.js",
+      "396.js",
+      "400.js",
+      "486.js",
+      "140.js",
+      "context.js"
+    ],
+    "matches": [
+      "*://*/*"
+    ],
+    "run_at": "document_end"
+  }],
+  "options_ui": {
+    "page": "options.html"
+  },
+  "web_accessible_resources": [
+    "res/*"
+  ],
+  "commands": {
+    "_execute_browser_action": {
+      "description": "__MSG_openPopup__"
+    },
+    "translateSelectedText": {
+      "description": "__MSG_translateSelectedText__"
+    },
+    "translateFullPage": {
+      "description": "__MSG_translateFullPage__"
+    }
+  }
+}

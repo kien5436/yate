@@ -1,0 +1,6 @@
+built
+node_modules
+*.zip
+*.pem
+*.crx
+assets.json
