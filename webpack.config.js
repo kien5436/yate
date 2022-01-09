@@ -13,14 +13,14 @@ module.exports = {
   mode: 'production',
   entry: {
     popup: './src/ui/popup/index.jsx',
-    context: './src/ui/context.jsx',
+    embedded: './src/ui/embedded/index.jsx',
     background: './src/background/index.js',
     options: './src/ui/options-page/index.jsx',
   },
   output: {
     filename: '[name].js',
     publicPath: '',
-    path: resolve('built'),
+    path: resolve('yate'),
   },
   module: {
     rules: [

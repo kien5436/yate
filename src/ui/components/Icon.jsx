@@ -12,21 +12,21 @@ import classname from '../common/classname';
 export default function Icon({ name, className = '', size = 'default', ...props }) {
 
   const iconSize = {
-    default: 'text-base',
-    lg: 'text-lg',
-    sm: 'text-sm',
-    xl: 'text-xl',
-    xs: 'text-xs',
+    default: 'yate-text-base',
+    lg: 'yate-text-lg',
+    sm: 'yate-text-sm',
+    xl: 'yate-text-xl',
+    xs: 'yate-text-xs',
   };
   const iconClass = classname({
-    'inline-block feather': true,
     [iconSize[size]]: true,
     [name]: true,
+    'yate-inline-block feather': true,
   });
 
   return (
     <span {...props}
-      className={`inline-flex justify-center items-center w-6 h-6 ${className}`}>
+      className={`yate-inline-flex yate-justify-center yate-items-center yate-w-6 yate-h-6 ${className}`}>
       <i className={iconClass} />
     </span>
   );

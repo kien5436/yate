@@ -1,10 +1,10 @@
 module.exports = (browser) => {
 
-  const version = '1.1.0';
+  const version = '1.1.1';
 
   switch (browser) {
 
-    case 'chrome':
+    case 'chromium':
       return {
         minimum_chrome_version: '92.0',
         version,

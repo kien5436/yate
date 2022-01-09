@@ -20,14 +20,14 @@ export default function Article({ text, smallText, className = '', lang }) {
   }
 
   return (
-    <div className={`flex ${className}`}>
-      <div className="w-11/12 pl-3">
-        <p className="dark:text-gray-200">{text}</p>
-        {smallText && <p className="text-sm text-gray-600 dark:text-gray-300">{smallText}</p>}
+    <div className={`yate-flex ${className}`}>
+      <div className="yate-w-11/12 yate-pl-3">
+        <p className="dark:yate-text-gray-200 yate-m-0">{text}</p>
+        {smallText && <p className="yate-text-sm yate-text-gray-600 dark:yate-text-gray-300 yate-m-0">{smallText}</p>}
       </div>
-      <div className="px-2">
+      <div className="yate-px-2">
         <Icon name="feather-volume"
-          className="cursor-pointer dark:text-gray-200"
+          className="yate-cursor-pointer dark:yate-text-gray-200"
           onClick={readText} />
       </div>
     </div>

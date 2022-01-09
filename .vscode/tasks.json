@@ -31,10 +31,10 @@
     },
     {
       "type": "shell",
-      "command": "yarn build-chrome --watch",
+      "command": "yarn build-chromium --watch",
       "problemMatcher": [],
-      "label": "build-chrome-dev",
-      "detail": "cross-env BROWSER=chrome webpack --watch",
+      "label": "build-chromium-dev",
+      "detail": "cross-env BROWSER=chromium webpack --watch",
       "group": "build",
       "presentation": {
         "echo": false,
@@ -48,10 +48,27 @@
     },
     {
       "type": "npm",
-      "script": "web-ext-dev",
+      "script": "dev",
       "problemMatcher": [],
       "label": "web-ext-dev",
       "detail": "web-ext run -s built -p dev",
+      "group": "build",
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "group": "dev"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "dev-chromium",
+      "problemMatcher": [],
+      "label": "dev-chromium",
+      "detail": "web-ext run -s yate -t chromium --chromium-binary google-chrome",
       "group": "build",
       "presentation": {
         "echo": false,

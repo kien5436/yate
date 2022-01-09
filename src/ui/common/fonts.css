@@ -14,17 +14,14 @@
 
 @font-face {
   font-family: 'icomoon';
-  src: url(res/fonts/icomoon.woff?wrq662) format('woff');
+  src: url(res/fonts/icomoon.woff) format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-html {
+#yate {
   font-size: 16px;
-}
-
-body {
   font-family: 'Nunito', sans-serif;
 }
 

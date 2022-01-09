@@ -1,8 +1,8 @@
-import 'tailwindcss/tailwind.css';
 import { h, render } from 'preact';
 import { i18n, runtime, storage } from 'webextension-polyfill';
 import { useEffect } from 'preact/hooks';
 
+import '../common/reset';
 import '../common/fonts';
 import { defaultOptions, extensionUrl } from '../../settings';
 import appIcon from '../../res/icons/96.png';
@@ -14,9 +14,9 @@ function Control({ children, className = '' }) {
   const [Label, Control] = children;
 
   return (
-    <li className={`flex items-center space-x-3 ${className}`}>
-      <div className="flex-1">{Label}</div>
-      <div className="flex-grow-0">{Control}</div>
+    <li className={`yate-flex yate-items-center yate-space-x-3 ${className}`}>
+      <div className="yate-flex-1">{Label}</div>
+      <div className="yate-flex-grow-0">{Control}</div>
     </li>
   );
 }
@@ -26,7 +26,7 @@ function LinkAddons({ className = '', href, text, children }) {
   return (
     <a href={href}
       target="_blank"
-      className={`flex items-center border border-blue-600 text-blue-600 rounded py-1 px-2 text-sm transition hover:bg-blue-600 hover:text-white ${className}`}
+      className={`yate-flex yate-items-center yate-border yate-border-blue-600 yate-text-blue-600 yate-rounded yate-py-1 yate-px-2 yate-text-sm yate-transition hover:yate-bg-blue-600 hover:yate-text-white ${className}`}
       rel="noreferrer">
       {children}
       <span>{text}</span>
@@ -41,12 +41,12 @@ export default function App() {
   useEffect(() => {
 
     if (options.darkTheme) {
-      document.querySelector('html').classList.add('dark');
+      document.querySelector('html').classList.add('yate-dark');
     }
     else {
-      document.querySelector('html').classList.remove('dark');
+      document.querySelector('html').classList.remove('yate-dark');
     }
-  }, [options]);
+  }, [options.darkTheme]);
 
   async function setLang(langCode, langType) {
 
@@ -92,35 +92,35 @@ export default function App() {
   }
 
   return (
-    <div className="max-w-lg p-3 mx-auto">
-      <div className="shadow border border-gray-300 rounded dark:bg-gray-900 dark:border-gray-700 dark:shadow-dark">
+    <div className="yate-max-w-lg yate-p-3 yate-mx-auto">
+      <div className="yate-shadow yate-border yate-border-gray-300 yate-rounded dark:yate-bg-gray-900 dark:yate-border-gray-700 dark:yate-shadow-dark">
         <a href="https://github.com/kien5436/yate"
-          className="flex justify-center items-center p-3">
+          className="yate-flex yate-justify-center yate-items-center yate-p-3">
           <img src={runtime.getURL(appIcon)}
-            className="w-8 h-8 mr-3" />
-          <h3 className="dark:text-gray-200">
-            <p className="font-bold text-xl">{i18n.getMessage('extensionName')}</p>
+            className="yate-w-8 yate-h-8 yate-mr-3" />
+          <h3 className="dark:yate-text-gray-200">
+            <p className="yate-font-bold yate-text-xl">{i18n.getMessage('extensionName')}</p>
             <p>{i18n.getMessage('description')}</p>
           </h3>
         </a>
-        <ul className="p-3">
-          <li className="mb-2 text-blue-400 font-bold">{i18n.getMessage('preferences')}</li>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('selectSourceLang')}</label>
+        <ul className="yate-p-3">
+          <li className="yate-mb-2 yate-text-blue-400 yate-font-bold">{i18n.getMessage('preferences')}</li>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('selectSourceLang')}</label>
             <ComboBox
               langType="sourceLang"
               defaultLang={options.sourceLang}
               onLangChange={setLang} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('selectTargetLang')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('selectTargetLang')}</label>
             <ComboBox
               langType="targetLang"
               defaultLang={options.targetLang}
               onLangChange={setLang} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('displayWithButton')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('displayWithButton')}</label>
             <input type="radio"
               name="translateWithButton"
               defaultChecked={options.translateWithButton}
@@ -128,8 +128,8 @@ export default function App() {
               value={1}
               onChange={onCheckboxChange} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('displayWithoutButton')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('displayWithoutButton')}</label>
             <input type="radio"
               name="translateWithButton"
               defaultChecked={!options.translateWithButton}
@@ -137,74 +137,74 @@ export default function App() {
               value={0}
               onChange={onCheckboxChange} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('autoSwapLanguages')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('autoSwapLanguages')}</label>
             <input type="checkbox"
               name="autoSwapLanguages"
               defaultChecked={options.autoSwapLanguages}
               checked={options.autoSwapLanguages}
               onChange={onCheckboxChange} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('keepHistory')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('keepHistory')}</label>
             <input type="checkbox"
               name="keepHistory"
               defaultChecked={options.keepHistory}
               checked={options.keepHistory}
               onChange={onCheckboxChange} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('toggleTheme')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('toggleTheme')}</label>
             <input type="checkbox"
               name="darkTheme"
               defaultChecked={options.darkTheme}
               checked={options.darkTheme}
               onChange={onCheckboxChange} />
           </Control>
-          {/* <li className="mb-2 text-blue-400 font-bold">{i18n.getMessage('shortcuts')}</li>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('defineShortcutPopup')}</label>
+          {/* <li className="yate-mb-2 yate-text-blue-400 yate-font-bold">{i18n.getMessage('shortcuts')}</li>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('defineShortcutPopup')}</label>
             <input type="text"
-              className="border border-gray-300 bg-transparent rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700"
+              className="yate-border yate-border-gray-300 yate-bg-transparent yate-rounded yate-px-2 yate-py-1 yate-text-sm yate-transition focus:yate-outline-none focus:yate-border-blue-400 dark:yate-text-gray-200 dark:yate-border-gray-700"
               placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutPopup ? options.shortcutPopup : ''}
               onKeyDown={onKeyDown} />
           </Control>
-          <Control className="mb-2">
-            <label className="dark:text-gray-200">{i18n.getMessage('translateSelectedText')}</label>
+          <Control className="yate-mb-2">
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('translateSelectedText')}</label>
             <input type="text"
-              className="border border-gray-300 bg-transparent rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700"
+              className="yate-border yate-border-gray-300 yate-bg-transparent yate-rounded yate-px-2 yate-py-1 yate-text-sm yate-transition focus:yate-outline-none focus:yate-border-blue-400 dark:yate-text-gray-200 dark:yate-border-gray-700"
               placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutSelectedText ? options.shortcutSelectedText : ''}
               onKeyDown={onKeyDown} />
           </Control>
           <Control>
-            <label className="dark:text-gray-200">{i18n.getMessage('translateFullPage')}</label>
+            <label className="dark:yate-text-gray-200">{i18n.getMessage('translateFullPage')}</label>
             <input type="text"
-              className="border border-gray-300 bg-transparent rounded px-2 py-1 text-sm transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700"
+              className="yate-border yate-border-gray-300 yate-bg-transparent yate-rounded yate-px-2 yate-py-1 yate-text-sm yate-transition focus:yate-outline-none focus:yate-border-blue-400 dark:yate-text-gray-200 dark:yate-border-gray-700"
               placeholder={i18n.getMessage('placeholderShortcut')}
               value={null !== options.shortcutTranslateFullPage ? options.shortcutTranslateFullPage : ''}
               onKeyDown={onKeyDown} />
           </Control> */}
         </ul>
-        <div className="flex justify-center p-3">
+        <div className="yate-flex yate-justify-center yate-p-3">
           <button type="button"
-            className="border border-blue-600 text-blue-600 rounded py-1 px-2 text-sm transition hover:bg-blue-600 hover:text-white"
+            className="yate-border yate-border-blue-600 yate-text-blue-600 yate-rounded yate-py-1 yate-px-2 yate-text-sm yate-transition hover:yate-bg-blue-600 hover:yate-text-white"
             title={i18n.getMessage('resetSettingsTooltip')}
             onClick={resetSettings}>
             {i18n.getMessage('resetSettings')}
           </button>
         </div>
       </div>
-      <div className="shadow border border-gray-300 rounded mt-3 dark:bg-gray-900 dark:border-gray-700 dark:shadow-dark">
-        <div className="flex items-center justify-center p-3">
+      <div className="yate-shadow yate-border yate-border-gray-300 yate-rounded yate-mt-3 dark:yate-bg-gray-900 dark:yate-border-gray-700 dark:yate-shadow-dark">
+        <div className="yate-flex yate-items-center yate-justify-center yate-p-3">
           <LinkAddons href={extensionUrl}
             text={i18n.getMessage('loveIt')}>
             <Icon name="feather-star-empty" />
           </LinkAddons>
           <LinkAddons href="https://kien5436.github.io/yate/privacy.html"
             text={i18n.getMessage('privacy')}
-            className="ml-2 mr-2">
+            className="yate-ml-2 yate-mr-2">
             <Icon name="feather-help-circle" />
           </LinkAddons>
           <LinkAddons href="https://kien5436.github.io/yate/"

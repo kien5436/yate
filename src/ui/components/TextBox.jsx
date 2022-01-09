@@ -38,10 +38,10 @@ export default function TextBox({ readOnly = false, autoFocus = false, lang, val
   }
 
   return (
-    <div className="relative w-1/2">
+    <div className="yate-relative yate-w-1/2">
       <textarea
         ref={textRef}
-        className="resize-none h-full w-full p-3 pr-10 has-scrollbar outline-none bg-transparent dark:text-gray-200"
+        className="yate-resize-none yate-h-full yate-w-full yate-p-3 yate-pr-10 has-scrollbar yate-outline-none yate-bg-transparent dark:yate-text-gray-200"
         maxLength={1000}
         rows={10}
         readOnly={readOnly}
@@ -49,13 +49,13 @@ export default function TextBox({ readOnly = false, autoFocus = false, lang, val
         value={value}
         onInput={onValueChange}
       />
-      <div className="absolute top-3 right-4 flex flex-col">
+      <div className="yate-absolute yate-top-3 yate-right-4 yate-flex yate-flex-col">
         {!readOnly &&
         <Icon name="feather-x"
-          className="cursor-pointer rounded transition-colors hover:bg-gray-100 mb-2 dark:text-gray-200 dark:hover:bg-gray-700"
+          className="yate-cursor-pointer yate-rounded yate-transition-colors hover:yate-bg-gray-100 yate-mb-2 dark:yate-text-gray-200 dark:hover:yate-bg-gray-700"
           onClick={resetValue} />}
         <Icon name="feather-volume"
-          className="cursor-pointer rounded transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+          className="yate-cursor-pointer yate-rounded yate-transition-colors hover:yate-bg-gray-100 dark:yate-text-gray-200 dark:hover:yate-bg-gray-700"
           onClick={readText} />
       </div>
     </div>

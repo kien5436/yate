@@ -29,16 +29,16 @@
   "content_scripts": [{
     "all_frames": true,
     "css": [
-      "659.css",
+      "969.css",
       "486.css"
     ],
     "js": [
-      "659.js",
+      "512.js",
       "396.js",
-      "400.js",
+      "969.js",
       "486.js",
       "140.js",
-      "context.js"
+      "embedded.js"
     ],
     "matches": [
       "*://*/*"

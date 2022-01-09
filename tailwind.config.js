@@ -7,11 +7,12 @@ module.exports = {
     backgroundClip: false,
     clear: false,
     float: false,
+    preflight: false,
   },
   darkMode: 'class',
-  important: true,
   mode: 'jit',
   plugins: [],
+  prefix: 'yate-',
   purge: {
     content: [
       './src/ui/**/*.jsx',

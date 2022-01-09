@@ -38,7 +38,7 @@ export default function ComboBox({ className = '', defaultLang, onLangChange, la
 
     setTypeStatus(!typing);
     setInput(selectedLangName);
-    dropdown.current.classList.toggle('hidden');
+    dropdown.current.classList.toggle('yate-hidden');
   }
 
   function selectLang(e) {
@@ -54,10 +54,10 @@ export default function ComboBox({ className = '', defaultLang, onLangChange, la
   }
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`yate-relative ${className}`}>
       <input
         type="text"
-        className="border border-gray-300 rounded px-2 py-1 text-sm w-full bg-transparent max-h-8 transition focus:outline-none focus:border-blue-400 dark:text-gray-200 dark:border-gray-700 dark:focus:border-blue-400"
+        className="!yate-border !yate-border-gray-300 !yate-rounded !yate-px-2 !yate-py-1 !yate-text-sm yate-w-full !yate-bg-transparent yate-max-h-8 !yate-m-0 yate-transition focus:yate-outline-none focus:!yate-shadow-none focus:!yate-border-blue-400 dark:!yate-text-gray-200 dark:!yate-border-gray-700 dark:focus:!yate-border-blue-400"
         placeholder={i18n.getMessage('placeholderSelectLanguage')}
         defaultValue={selectedLangName}
         value={typing ? input : selectedLangName}
@@ -65,12 +65,12 @@ export default function ComboBox({ className = '', defaultLang, onLangChange, la
         onBlur={toggleDropdown}
         onInput={filterLanguage}
       />
-      <div className="absolute left-0 top-6 w-full rounded-b shadow-md bg-white max-h-40 overflow-hidden z-10 border-b border-r border-l border-blue-400 hidden dark:bg-gray-900"
+      <div className="yate-absolute yate-left-0 yate-top-6 yate-w-full yate-rounded-b yate-shadow-md yate-bg-white yate-max-h-40 yate-overflow-hidden yate-z-10 yate-border yate-border-t-0 yate-border-solid !yate-border-blue-400 yate-hidden dark:yate-bg-gray-900"
         ref={dropdown}>
-        <ul className="py-1 max-h-40 overflow-y-auto has-scrollbar text-sm">
+        <ul className="yate-py-1 yate-max-h-40 yate-overflow-y-auto has-scrollbar yate-text-sm yate-m-0">
           {
             dedicatedLangs.map((name) => <li key={name}
-              className="w-full whitespace-nowrap py-1 5 px-4 cursor-default transition-colors hover:bg-blue-400 hover:text-gray-50 dark:text-gray-200 dark:hover:bg-blue-600"
+              className="yate-w-full yate-whitespace-nowrap yate-py-1 5 yate-px-4 yate-cursor-default yate-transition-colors hover:yate-bg-blue-400 hover:yate-text-gray-50 dark:yate-text-gray-200 dark:hover:yate-bg-blue-600"
               data-lang-code={langs[name]}
               onMouseDown={selectLang}>{name}</li>)
           }

@@ -6,13 +6,14 @@
   "license": "MIT",
   "scripts": {
     "build-ff": "cross-env BROWSER=firefox webpack",
-    "build-chrome": "cross-env BROWSER=chrome webpack",
-    "pack-src": "zip -r -FS source.zip src INSTRUCTIONS.md package.json webpack.config.js yarn.lock tailwind.config.js",
+    "build-chromium": "cross-env BROWSER=chromium webpack",
+    "pack-src": "zip -r -FS source.zip src INSTRUCTIONS.md package.json webpack.config.js yarn.lock tailwind.config.js babel.config.json",
     "release": "yarn build-ff && yarn web-ext-build && yarn pack-src",
-    "release-chrome": "yarn build-chrome && google-chrome --pack-extension=./built --pack-extension-key=./built.pem --disable-setuid-sandbox",
-    "web-ext-build": "web-ext build -s built -a . -o",
-    "web-ext-dev": "web-ext run -s built -p dev",
-    "web-ext-lint": "web-ext lint -s built"
+    "release-chromium": "yarn build-chromium && google-chrome --pack-extension=./yate --pack-extension-key=./yate.pem --disable-setuid-sandbox",
+    "web-ext-build": "web-ext build -s yate -a . -o",
+    "dev": "web-ext run -s yate -p dev",
+    "dev-chromium": "web-ext run -s yate -t chromium --chromium-binary google-chrome",
+    "web-ext-lint": "web-ext lint -s yate"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -36,17 +37,17 @@
     "postcss-loader": "^6.2.1",
     "tailwindcss": "^2.2.19",
     "terser-webpack-plugin": "^5.3.0",
+    "web-ext": "^6.6.0",
     "web-ext-types": "^3.2.1",
     "webpack": "^5.64.4",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "webpack-manifest-plugin": "^4.0.2"
   },
   "dependencies": {
     "@babel/runtime": "^7.16.3",
     "@babel/runtime-corejs3": "^7.16.3",
     "preact": "^10.6.1",
-    "web-ext": "^6.6.0",
-    "webextension-polyfill": "^0.8.0",
-    "webpack-manifest-plugin": "^4.0.2"
+    "webextension-polyfill": "^0.8.0"
   },
   "browserslist": [
     "last 5 chrome version",
