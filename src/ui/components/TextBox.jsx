@@ -4,7 +4,7 @@ import { h } from 'preact';
 import '../common/scrollbar';
 import debounce from '../common/debounce';
 import Icon from "./Icon";
-import useTTS from '../hooks/useTTS';
+import { useTTS } from '../hooks/useTTS';
 
 /**
  * @param {{

@@ -29,15 +29,14 @@
   "content_scripts": [{
     "all_frames": true,
     "css": [
-      "969.css",
-      "486.css"
+      "400.css",
+      "116.css"
     ],
     "js": [
       "512.js",
-      "396.js",
-      "969.js",
-      "486.js",
-      "140.js",
+      "400.js",
+      "116.js",
+      "826.js",
       "embedded.js"
     ],
     "matches": [
@@ -46,6 +45,7 @@
     "run_at": "document_end"
   }],
   "options_ui": {
+    "open_in_tab": true,
     "page": "options.html"
   },
   "web_accessible_resources": [

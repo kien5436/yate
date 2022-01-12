@@ -1,7 +1,7 @@
 import { h } from 'preact';
 
 import Icon from './Icon';
-import useTTS from '../hooks/useTTS';
+import { useTTS } from '../hooks/useTTS';
 
 /**
  * @param {{
