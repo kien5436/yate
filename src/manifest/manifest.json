@@ -37,7 +37,7 @@
       "396.js",
       "969.js",
       "486.js",
-      "140.js",
+      "105.js",
       "embedded.js"
     ],
     "matches": [
@@ -46,6 +46,7 @@
     "run_at": "document_end"
   }],
   "options_ui": {
+    "open_in_tab": true,
     "page": "options.html"
   },
   "web_accessible_resources": [

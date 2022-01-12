@@ -1,7 +1,7 @@
 import AudioPlayer from "../common/audio";
 import { tts } from "../../background/api";
 
-export default function useTTS() {
+export function useTTS() {
   const audio = new AudioPlayer();
 
   return async function(text, targetLang) {

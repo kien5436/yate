@@ -8,10 +8,36 @@ import '../common/scrollbar';
 import appIcon from '../../res/icons/48.png';
 import Article from '../components/Article';
 import LanguageSelection from '../components/LanguageSelection';
+import { useBackgroundTranslation } from '../hooks/useTranslation';
 import useSettings from '../hooks/useSettings';
-import useTranslation from '../hooks/useTranslation';
 
 function MainPanel() {
+
+  /** @type import('preact/hooks').MutableRef<HTMLElement> */
+  const popBtn = useRef(null);
+  /** @type import('preact/hooks').MutableRef<HTMLElement> */
+  const popPanel = useRef(null);
+  const [options, setOptions] = useSettings();
+  const { result, text, setText, sourceLang, setSourceLang, targetLang, setTargetLang } = useBackgroundTranslation();
+  const showTranslationPanel = useCallback((e) => {
+
+    options.translateWithButton && popBtn.current.classList.add('yate-hidden');
+    popPanel.current.style.setProperty('left', `${e.pageX}px`);
+    popPanel.current.style.setProperty('top', `${e.pageY}px`);
+    popPanel.current.classList.remove('yate-hidden');
+  }, [options.translateWithButton]);
+  const [timer, setTimer] = useState(null);
+
+  useEffect(() => {
+
+    function onReceiveMessage(message) {
+      setOptions((prevOptions) => ({ ...prevOptions, ...message.options }));
+    }
+
+    runtime.onMessage.addListener(onReceiveMessage);
+
+    return () => runtime.onMessage.removeListener(onReceiveMessage);
+  }, []);
 
   useEffect(() => {
 
@@ -41,57 +67,58 @@ function MainPanel() {
     document.head.append(style);
   }, []);
 
-  /** @type import('preact/hooks').MutableRef<HTMLElement> */
-  const popBtn = useRef(null);
-  /** @type import('preact/hooks').MutableRef<HTMLElement> */
-  const popPanel = useRef(null);
-  const [options] = useSettings();
-  const [translation, setTranslation] = useState({});
-  const setResult = useCallback((result) => setTranslation(result ? result : {}), []);
-  const {
-    setSourceLang,
-    setTargetLang,
-    setText,
-    sourceLang,
-    targetLang,
-    text,
-  } = useTranslation(setResult);
-  const showTranslationPanel = useCallback((e, selectedText = window.getSelection().toString()
-    .trim()) => {
+  useEffect(() => {
 
-    options.translateWithButton && popBtn.current.classList.add('yate-hidden');
-
-    setText(selectedText);
-
-    popPanel.current.style.setProperty('left', `${e.pageX}px`);
-    popPanel.current.style.setProperty('top', `${e.pageY}px`);
-    popPanel.current.classList.remove('yate-hidden');
-  }, [options.translateWithButton, setText]);
+    if (options.darkTheme) {
+      root.classList.add('yate-dark');
+    }
+    else {
+      root.classList.remove('yate-dark');
+    }
+  }, [options.darkTheme]);
 
   useEffect(() => {
 
     /** @param {MouseEvent} e */
-    function showTranslationPopup(e) {
+    function showPopup(e) {
 
       if (null !== e.target.closest('#yate')) return;
 
       const selectedText = window.getSelection().toString()
         .trim();
 
+      setText(selectedText);
+
       if ('' === selectedText) {
 
         options.translateWithButton && popBtn.current.classList.add('yate-hidden');
         popPanel.current.classList.add('yate-hidden');
+
+        if (timer) {
+
+          clearTimeout(timer);
+          setTimer(null);
+        }
+
         return;
       }
 
       if (options.translateWithButton) {
+
         showTranslationButton(e);
-        setTimeout(() => options.translateWithButton && popBtn.current.classList.add('yate-hidden')
+
+        if (timer) {
+
+          clearTimeout(timer);
+          setTimer(null);
+        }
+
+        const timeout = setTimeout(() => options.translateWithButton && popBtn.current.classList.add('yate-hidden')
           , 2000);
+        setTimer(timeout);
       }
       else {
-        showTranslationPanel(e, selectedText);
+        showTranslationPanel(e);
       }
     }
 
@@ -102,13 +129,13 @@ function MainPanel() {
       popBtn.current.classList.remove('yate-hidden');
     }
 
-    document.addEventListener('mouseup', showTranslationPopup, false);
+    document.addEventListener('mouseup', showPopup, false);
 
-    return () => document.removeEventListener('mouseup', showTranslationPopup, false);
-  }, [options.translateWithButton, showTranslationPanel]);
+    return () => document.removeEventListener('mouseup', showPopup, false);
+  }, [options.translateWithButton, setText, showTranslationPanel, timer]);
 
   return (
-    <div className={options.darkTheme ? 'yate-dark' : ''}>
+    <Fragment>
       {options.translateWithButton &&
         <img ref={popBtn}
           src={runtime.getURL(appIcon)}
@@ -126,16 +153,16 @@ function MainPanel() {
         </div>
         <div className="has-scrollbar yate-overflow-auto yate-py-3"
           style={{ maxHeight: 'calc(16rem - 2.75rem)' }}>
-          {translation.error && <p className="yate-text-sm yate-text-gray-600 dark:yate-text-gray-300 yate-px-3 yate-m-0">{translation.error}</p>}
-          {translation.spelling && <Article text={text}
-            smallText={translation.spelling}
+          {result.error && <p className="yate-text-sm yate-text-gray-600 dark:yate-text-gray-300 yate-px-3 yate-m-0">{result.error}</p>}
+          {result.spelling && <Article text={text}
+            smallText={result.spelling}
             className="yate-mb-2"
             lang={sourceLang} />}
-          {translation.trans && <Article text={translation.trans}
+          {result.trans && <Article text={result.trans}
             className="yate-mb-2"
             lang={targetLang} />}
-          {translation.synonyms &&
-            translation.synonyms.map(({ type, terms }) => (
+          {result.synonyms &&
+            result.synonyms.map(({ type, terms }) => (
               <Fragment key={type}>
                 <p className="yate-text-sm yate-pl-2 yate-text-blue-400 yate-font-bold yate-mb-1">{type}</p>
                 {terms.map(({ word, reverseTranslation }, i) =>
@@ -148,7 +175,7 @@ function MainPanel() {
             ))}
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 }
 

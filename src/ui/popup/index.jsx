@@ -1,6 +1,6 @@
 import { h, render } from 'preact';
-import { i18n, runtime, storage, tabs } from 'webextension-polyfill';
-import { useCallback, useEffect, useState } from 'preact/hooks';
+import { i18n, runtime, storage } from 'webextension-polyfill';
+import { useEffect } from 'preact/hooks';
 
 import '../common/reset';
 import '../common/fonts';
@@ -10,20 +10,19 @@ import Icon from '../components/Icon';
 import LanguageSelection from '../components/LanguageSelection';
 import TextBox from '../components/TextBox';
 import useSettings from '../hooks/useSettings';
-import useTranslation from '../hooks/useTranslation';
+import { useTranslation } from '../hooks/useTranslation';
 
 function App() {
   const [options] = useSettings();
-  const [translatedText, setTranslatedText] = useState('');
-  const setResult = useCallback((result) => setTranslatedText(result ? (result.error ? result.error : result.trans) : ''), []);
   const {
+    result,
     setSourceLang,
     setTargetLang,
     setText,
     sourceLang,
     targetLang,
     text,
-  } = useTranslation(setResult);
+  } = useTranslation();
 
   useEffect(() => {
 
@@ -74,11 +73,11 @@ function App() {
 
     setSourceLang(targetLang);
     setTargetLang(tmp);
-    setText(translatedText);
+    setText(result);
   }
 
   function openSettings() {
-    tabs.create({ url: runtime.getURL('options.html') });
+    runtime.openOptionsPage();
   }
 
   return (
@@ -117,7 +116,7 @@ function App() {
           setValue={setText} />
         <TextBox readOnly={true}
           lang={targetLang}
-          value={translatedText} />
+          value={result} />
       </div>
     </div>
   );

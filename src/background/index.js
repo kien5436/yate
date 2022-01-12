@@ -1,10 +1,12 @@
-import { runtime, tabs } from 'webextension-polyfill';
+import { runtime, storage } from 'webextension-polyfill';
 
+import { connected, storageChanged } from './broadcast';
 import createMenu from './context-menu';
 
-runtime.onInstalled.addListener(() => {
+runtime.onInstalled.addListener(() => runtime.openOptionsPage());
 
-  tabs.create({ url: runtime.getURL('options.html') });
-});
+storage.onChanged.addListener(storageChanged);
+
+runtime.onConnect.addListener(connected);
 
 createMenu();
