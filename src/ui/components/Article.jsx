@@ -1,7 +1,9 @@
 import { h } from 'preact';
+import { runtime } from 'webextension-polyfill';
+import { useCallback } from 'preact/hooks';
 
+import debounce from '../common/debounce';
 import Icon from './Icon';
-import { useTTS } from '../hooks/useTTS';
 
 /**
  * @param {{
@@ -13,10 +15,11 @@ import { useTTS } from '../hooks/useTTS';
  */
 export default function Article({ text, smallText, className = '', lang }) {
 
-  const playSound = useTTS();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedPlaySound = useCallback(debounce((text, targetLang) => runtime.sendMessage({ targetLang, text }), 700), []);
 
   function readText() {
-    playSound(text, lang);
+    if ('' !== text) debouncedPlaySound(text, lang);
   }
 
   return (

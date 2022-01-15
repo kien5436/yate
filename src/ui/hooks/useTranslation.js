@@ -143,7 +143,7 @@ export function useBackgroundTranslation() {
       }
     }
 
-    const port = runtime.connect({ name: 'cs' });
+    const port = runtime.connect();
 
     port.onMessage.addListener(onReceiveMessage);
     setPort(port);
@@ -186,7 +186,6 @@ export function useBackgroundTranslation() {
           if (undefined === result) {
 
             port.postMessage({
-              action: 'translate',
               sourceLang,
               targetLang,
               text: sourceText,

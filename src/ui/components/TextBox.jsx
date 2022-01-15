@@ -1,10 +1,10 @@
-import { useCallback, useRef } from 'preact/hooks';
+import { useCallback, useEffect, useRef } from 'preact/hooks';
 import { h } from 'preact';
+import { runtime } from 'webextension-polyfill';
 
 import '../common/scrollbar';
 import debounce from '../common/debounce';
 import Icon from "./Icon";
-import { useTTS } from '../hooks/useTTS';
 
 /**
  * @param {{
@@ -18,11 +18,10 @@ import { useTTS } from '../hooks/useTTS';
  */
 export default function TextBox({ readOnly = false, autoFocus = false, lang, value, setValue }) {
   const textRef = useRef(null);
-  const playSound = useTTS();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSetValue = useCallback(debounce(setValue, 700), []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedPlaySound = useCallback(debounce(playSound, 700), []);
+  const debouncedPlaySound = useCallback(debounce((text, targetLang) => runtime.sendMessage({ targetLang, text }), 700), []);
 
   function resetValue() {
     setValue('');
@@ -34,7 +33,7 @@ export default function TextBox({ readOnly = false, autoFocus = false, lang, val
   }
 
   function readText() {
-    debouncedPlaySound(value, lang);
+    if ('' !== value) debouncedPlaySound(value, lang);
   }
 
   return (

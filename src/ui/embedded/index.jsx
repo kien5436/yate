@@ -87,31 +87,21 @@ function MainPanel() {
       const selectedText = window.getSelection().toString()
         .trim();
 
+      options.translateWithButton && popBtn.current.classList.add('yate-hidden');
+      popPanel.current.classList.add('yate-hidden');
       setText(selectedText);
 
-      if ('' === selectedText) {
+      if (timer) {
 
-        options.translateWithButton && popBtn.current.classList.add('yate-hidden');
-        popPanel.current.classList.add('yate-hidden');
-
-        if (timer) {
-
-          clearTimeout(timer);
-          setTimer(null);
-        }
-
-        return;
+        clearTimeout(timer);
+        setTimer(null);
       }
+
+      if ('' === selectedText) return;
 
       if (options.translateWithButton) {
 
         showTranslationButton(e);
-
-        if (timer) {
-
-          clearTimeout(timer);
-          setTimer(null);
-        }
 
         const timeout = setTimeout(() => options.translateWithButton && popBtn.current.classList.add('yate-hidden')
           , 2000);
@@ -132,7 +122,7 @@ function MainPanel() {
     document.addEventListener('mouseup', showPopup, false);
 
     return () => document.removeEventListener('mouseup', showPopup, false);
-  }, [options.translateWithButton, setText, showTranslationPanel, timer]);
+  }, [options.translateWithButton, showTranslationPanel, timer]);
 
   return (
     <Fragment>
