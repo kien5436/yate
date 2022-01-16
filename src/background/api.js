@@ -116,7 +116,15 @@ export const langs = {
   Zulu: 'zu',
 };
 
+/**
+ * @param {sring} text
+ * @param {string} sourceLang
+ * @param {string} targetLang
+ */
 export async function translate(text, sourceLang = 'auto', targetLang = 'vi') {
+
+  if ('' === text) return null;
+
   let res = await fetch(buildRequestUrl(text, sourceLang, targetLang), buildRequestOptions());
 
   if (200 === res.status) {
@@ -142,7 +150,7 @@ export function openInGoogleTranslate(pageUrl, targetLang = 'vi') {
     u: pageUrl,
   }).toString();
 
-  browserTabs.update({ url: PAGE_TRANSLATION_URL + params }).catch((err) => console.error('api.js:27', err));
+  browserTabs.update({ url: PAGE_TRANSLATION_URL + params }).catch((err) => console.error('api.js:145', err));
 }
 
 /**
@@ -150,6 +158,8 @@ export function openInGoogleTranslate(pageUrl, targetLang = 'vi') {
  * @param {string} targetLang
  */
 export async function tts(text, targetLang) {
+
+  if ('' === text) return null;
 
   const params = new URLSearchParams({
     client: 'dict-chrome-ex',

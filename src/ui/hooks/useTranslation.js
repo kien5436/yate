@@ -1,9 +1,9 @@
 import { i18n, runtime, storage } from "webextension-polyfill";
-import { useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useState } from "preact/hooks";
 
-import { translate } from "../../background/api";
 import getSettings from '../../settings';
 import mummumHash from '../common/hash';
+import { translate } from "../../background/api";
 import useSettings from "./useSettings";
 
 export function useTranslation() {
@@ -29,11 +29,11 @@ export function useTranslation() {
     if (sourceLang === targetLang) return;
 
     (async () => {
-      try {
-        const sourceText = text.trim();
+      const sourceText = text.trim();
 
-        if ('' !== sourceText) {
+      if ('' !== sourceText) {
 
+        try {
           const key = mummumHash(sourceText + sourceLang + targetLang);
           /** @type {{indexes: string[] | undefined}} */
           const existedResult = await storage.local.get([key, 'indexes']);
@@ -74,13 +74,13 @@ export function useTranslation() {
 
           setResult(result.trans);
         }
-        else {
-          setResult('');
+        catch (err) {
+          console.error('useTranslation.js:69', err);
+          setResult(i18n.getMessage('serviceUnavailable'));
         }
       }
-      catch (err) {
-        console.error('useTranslation.js:69', err);
-        setResult(i18n.getMessage('serviceUnavailable') );
+      else {
+        setResult('');
       }
     })();
   }, [options.autoSwapLanguages, sourceLang, targetLang, text]);
@@ -104,77 +104,7 @@ export function useBackgroundTranslation() {
   const [text, setText] = useState('');
   const [result, setResult] = useState({ trans: '' });
   const [port, setPort] = useState(null);
-
-  useEffect(() => {
-
-    (async () => {
-
-      const syncedOptions = await getSettings();
-      setSourceLang(syncedOptions.sourceLang);
-      setTargetLang(syncedOptions.targetLang);
-    })();
-  }, []);
-
-  useEffect(() => {
-
-    if (sourceLang === targetLang) return;
-
-    (async () => {
-      try {
-        const sourceText = text.trim();
-
-        if ('' !== sourceText) {
-
-          const key = mummumHash(sourceText + sourceLang + targetLang);
-          /** @type {{indexes: string[] | undefined}} */
-          const existedResult = await storage.local.get([key, 'indexes']);
-          let result = null;
-
-          if (undefined === existedResult.indexes) {
-            existedResult.indexes = [];
-          }
-
-          if (undefined === existedResult[key]) {
-
-            port.postMessage({ action: 'translate', text: sourceText });
-
-            if (1000 === existedResult.indexes.length) {
-
-              const deletedKey = existedResult.indexes.splice(0, 1);
-              await storage.local.remove(deletedKey);
-            }
-
-            existedResult.indexes.push(key);
-            await storage.local.set({ indexes: existedResult.indexes, [key]: result });
-          }
-          else {
-            result = existedResult[key];
-          }
-
-          if (result.sourceLang && 'auto' === sourceLang) {
-            setSourceLang(result.sourceLang);
-          }
-
-          if (options.autoSwapLanguages && 'auto' !== sourceLang && result.sourceLang === targetLang) {
-
-            const tmp = sourceLang;
-
-            setSourceLang(targetLang);
-            setTargetLang(tmp);
-          }
-        }
-        else {
-          setResult({ trans: '' });
-        }
-      }
-      catch (err) {
-        console.error('useTranslation.js:69', err);
-        setResult({ error: i18n.getMessage('serviceUnavailable') });
-      }
-    })();
-  }, [options.autoSwapLanguages, port, sourceLang, targetLang, text]);
-
-  useEffect(() => {
+  const connectToBackground = useCallback(() => {
 
     async function onReceiveMessage(message) {
 
@@ -198,14 +128,6 @@ export function useBackgroundTranslation() {
             existedResult.indexes = [];
           }
 
-          // if (options.autoSwapLanguages && 'auto' !== sourceLang && message.translation.sourceLang === targetLang) {
-
-          //   const tmp = sourceLang;
-
-          //   setSourceLang(targetLang);
-          //   setTargetLang(tmp);
-          // }
-
           if (1000 === existedResult.indexes.length) {
 
             const deletedKey = existedResult.indexes.splice(0, 1);
@@ -216,18 +138,85 @@ export function useBackgroundTranslation() {
           await storage.local.set({ indexes: existedResult.indexes, [key]: message.translation });
         }
         catch (err) {
-          console.error('useTranslation.js:216:', err);
+          console.error('useTranslation.js:143:', err);
         }
       }
     }
 
-    const port = runtime.connect({ name: 'cs' });
+    const port = runtime.connect();
 
     port.onMessage.addListener(onReceiveMessage);
     setPort(port);
 
     return () => port.onMessage.removeListener(onReceiveMessage);
+  }, [sourceLang, targetLang, text]);
+
+  useEffect(() => {
+
+    (async () => {
+
+      const syncedOptions = await getSettings();
+      setSourceLang(syncedOptions.sourceLang);
+      setTargetLang(syncedOptions.targetLang);
+    })();
   }, []);
+
+  useEffect(() => {
+
+    const cleanup = connectToBackground();
+
+    return () => cleanup();
+  }, [connectToBackground]);
+
+  useEffect(() => {
+
+    if (sourceLang === targetLang) return;
+
+    (async () => {
+      const sourceText = text.trim();
+
+      if ('' !== sourceText) {
+
+        try {
+          const key = mummumHash(sourceText + sourceLang + targetLang);
+          /** @type {{indexes: string[] | undefined}} */
+          const existedResult = await storage.local.get(key);
+          const result = existedResult[key];
+
+          if (undefined === result) {
+
+            port.postMessage({
+              sourceLang,
+              targetLang,
+              text: sourceText,
+            });
+            return;
+          }
+
+          setResult(result);
+
+          if (result.sourceLang && 'auto' === sourceLang) {
+            setSourceLang(result.sourceLang);
+          }
+
+          if (options.autoSwapLanguages && 'auto' !== sourceLang && result.sourceLang === targetLang) {
+
+            const tmp = sourceLang;
+
+            setSourceLang(targetLang);
+            setTargetLang(tmp);
+          }
+        }
+        catch (err) {
+          console.error('useTranslation.js:69', err);
+          setResult({ error: i18n.getMessage('serviceUnavailable') });
+        }
+      }
+      else {
+        setResult({ trans: '' });
+      }
+    })();
+  }, [options.autoSwapLanguages, port, sourceLang, targetLang, text]);
 
   return {
     result,

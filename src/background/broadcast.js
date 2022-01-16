@@ -1,6 +1,9 @@
-import { tabs } from 'webextension-polyfill';
+import { i18n, tabs } from 'webextension-polyfill';
 
-import { translate } from './api';
+import { translate, tts } from './api';
+import AudioPlayer from './audio';
+
+const audio = new AudioPlayer();
 
 /**
  * @param {{[key: string]: import('webextension-polyfill').Storage.StorageChange}} changes
@@ -13,7 +16,7 @@ export async function storageChanged(changes, area) {
     const options = {};
 
     for (const key in changes) {
-      if (changes.hasOwnProperty( key)) {
+      if (changes.hasOwnProperty(key)) {
         options[key] = changes[key].newValue;
       }
     }
@@ -40,24 +43,36 @@ export async function storageChanged(changes, area) {
 /** @param {import('webextension-polyfill').Runtime.Port} port */
 export function connected(port) {
 
-  port.onMessage.addListener(onMessage);
+  port.onMessage.addListener(doTranslate);
 }
 
 /**
- * @param {{action: 'translate' | 'pronounce'; text: string}} message
+ * @param {{
+ *  text: string;
+ *  sourceLang: string;
+ *  targetLang: string;
+ * }} message
  * @param {import('webextension-polyfill').Runtime.Port} port
  */
-async function onMessage(message, port) {
+async function doTranslate(message, port) {
 
-  if ('translate' === message.action) {
+  try {
+    const translation = await translate(message.text, message.sourceLang, message.targetLang);
+    port.postMessage({ translation });
+  }
+  catch (err) {
+    console.error('broadcast.js:45:', err);
+    port.postMessage({ error: i18n.getMessage('serviceUnavailable') });
+  }
+}
 
-    try {
-      const translation = await translate(message.text);
-      port.postMessage({ action: message.action, translation });
-    }
-    catch (err) {
-      console.error('broadcast.js:45:', err);
-      port.postMessage({ action: message.action, error: err });
-    }
+export async function doTTS(message) {
+
+  try {
+    audio.src = await tts(message.text, message.targetLang);
+    audio.play();
+  }
+  catch (err) {
+    console.error('broadcast.js:80', err);
   }
 }

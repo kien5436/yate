@@ -1,5 +1,5 @@
+import { h, render } from 'preact';
 import { i18n, runtime, storage } from 'webextension-polyfill';
-import { render } from 'preact';
 import { useEffect } from 'preact/hooks';
 
 import '../common/reset';

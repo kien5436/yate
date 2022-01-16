@@ -8,8 +8,8 @@ import '../common/scrollbar';
 import appIcon from '../../res/icons/48.png';
 import Article from '../components/Article';
 import LanguageSelection from '../components/LanguageSelection';
-import useSettings from '../hooks/useSettings';
 import { useBackgroundTranslation } from '../hooks/useTranslation';
+import useSettings from '../hooks/useSettings';
 
 function MainPanel() {
 
@@ -18,20 +18,15 @@ function MainPanel() {
   /** @type import('preact/hooks').MutableRef<HTMLElement> */
   const popPanel = useRef(null);
   const [options, setOptions] = useSettings();
-  const [port] = useState(() => runtime.connect({ name: 'cs' }));
-  // const showresultPanel = useCallback((e, selectedText = window.getSelection().toString()
-  //   .trim()) => {
-
-  //   options.translateWithButton && popBtn.current.classList.add('yate-hidden');
-
-  //   port && port.postMessage({ action: 'translate', text: selectedText });
-  //   setText(selectedText);
-
-  //   popPanel.current.style.setProperty('left', `${e.pageX}px`);
-  //   popPanel.current.style.setProperty('top', `${e.pageY}px`);
-  //   popPanel.current.classList.remove('yate-hidden');
-  // }, [options.translateWithButton, port, setText]);
   const { result, text, setText, sourceLang, setSourceLang, targetLang, setTargetLang } = useBackgroundTranslation();
+  const showTranslationPanel = useCallback((e) => {
+
+    options.translateWithButton && popBtn.current.classList.add('yate-hidden');
+    popPanel.current.style.setProperty('left', `${e.pageX}px`);
+    popPanel.current.style.setProperty('top', `${e.pageY}px`);
+    popPanel.current.classList.remove('yate-hidden');
+  }, [options.translateWithButton]);
+  const [timer, setTimer] = useState(null);
 
   useEffect(() => {
 
@@ -92,20 +87,28 @@ function MainPanel() {
       const selectedText = window.getSelection().toString()
         .trim();
 
-      if ('' === selectedText) {
+      options.translateWithButton && popBtn.current.classList.add('yate-hidden');
+      popPanel.current.classList.add('yate-hidden');
+      setText(selectedText);
 
-        options.translateWithButton && popBtn.current.classList.add('yate-hidden');
-        popPanel.current.classList.add('yate-hidden');
-        return;
+      if (timer) {
+
+        clearTimeout(timer);
+        setTimer(null);
       }
+
+      if ('' === selectedText) return;
 
       if (options.translateWithButton) {
+
         showTranslationButton(e);
-        setTimeout(() => options.translateWithButton && popBtn.current.classList.add('yate-hidden')
+
+        const timeout = setTimeout(() => options.translateWithButton && popBtn.current.classList.add('yate-hidden')
           , 2000);
+        setTimer(timeout);
       }
       else {
-        // showresultPanel(e, selectedText);
+        showTranslationPanel(e);
       }
     }
 
@@ -119,7 +122,7 @@ function MainPanel() {
     document.addEventListener('mouseup', showPopup, false);
 
     return () => document.removeEventListener('mouseup', showPopup, false);
-  }, [options.translateWithButton]);
+  }, [options.translateWithButton, showTranslationPanel, timer]);
 
   return (
     <Fragment>

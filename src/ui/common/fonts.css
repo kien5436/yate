@@ -25,6 +25,10 @@
   font-family: 'Nunito', sans-serif;
 }
 
+#yate input {
+  font-family: inherit;
+}
+
 .feather {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
