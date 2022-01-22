@@ -35,5 +35,10 @@ module.exports = {
       zIndex: { max: 2147483647 },
     },
   },
-  variants: { extend: { borderWidth: ['focus'] } },
+  variants: {
+    extend: {
+      borderWidth: ['focus'],
+      margin: ['last'],
+    },
+  },
 };

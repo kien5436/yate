@@ -1,5 +1,5 @@
 .has-scrollbar {
-  scrollbar-color: dark;
+  scrollbar-color: #888 transparent;
   scrollbar-width: thin;
 }
 

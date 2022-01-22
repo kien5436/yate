@@ -21,11 +21,10 @@
 }
 
 #yate {
-  font-size: 16px;
   font-family: 'Nunito', sans-serif;
 }
 
-#yate input {
+#yate input, #yate p {
   font-family: inherit;
 }
 

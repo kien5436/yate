@@ -108,39 +108,39 @@ export function useBackgroundTranslation() {
 
     async function onReceiveMessage(message) {
 
-      if ('translate' === message.action) {
+      // if ('translate' === message.action) {
 
-        if (message.error) {
+      if (message.error) {
 
-          setResult({ error: message.error });
-          return;
-        }
-
-        setResult(message.translation);
-        setSourceLang((prevSourceLang) => (message.translation.sourceLang && 'auto' === prevSourceLang ? message.translation.sourceLang : prevSourceLang));
-
-        try {
-          const key = mummumHash(text + sourceLang + targetLang);
-          /** @type {{indexes: string[] | undefined}} */
-          const existedResult = await storage.local.get([key, 'indexes']);
-
-          if (undefined === existedResult.indexes) {
-            existedResult.indexes = [];
-          }
-
-          if (1000 === existedResult.indexes.length) {
-
-            const deletedKey = existedResult.indexes.splice(0, 1);
-            await storage.local.remove(deletedKey);
-          }
-
-          existedResult.indexes.push(key);
-          await storage.local.set({ indexes: existedResult.indexes, [key]: message.translation });
-        }
-        catch (err) {
-          console.error('useTranslation.js:143:', err);
-        }
+        setResult({ error: message.error });
+        return;
       }
+
+      setResult(message.translation);
+      setSourceLang((prevSourceLang) => (message.translation.sourceLang && 'auto' === prevSourceLang ? message.translation.sourceLang : prevSourceLang));
+
+      try {
+        const key = mummumHash(text + sourceLang + targetLang);
+        /** @type {{indexes: string[] | undefined}} */
+        const existedResult = await storage.local.get([key, 'indexes']);
+
+        if (undefined === existedResult.indexes) {
+          existedResult.indexes = [];
+        }
+
+        if (1000 === existedResult.indexes.length) {
+
+          const deletedKey = existedResult.indexes.splice(0, 1);
+          await storage.local.remove(deletedKey);
+        }
+
+        existedResult.indexes.push(key);
+        await storage.local.set({ indexes: existedResult.indexes, [key]: message.translation });
+      }
+      catch (err) {
+        console.error('useTranslation.js:143:', err);
+      }
+      // }
     }
 
     const port = runtime.connect();
@@ -153,13 +153,13 @@ export function useBackgroundTranslation() {
 
   useEffect(() => {
 
-    (async () => {
+    // (async () => {
 
-      const syncedOptions = await getSettings();
-      setSourceLang(syncedOptions.sourceLang);
-      setTargetLang(syncedOptions.targetLang);
-    })();
-  }, []);
+    //   const syncedOptions = await getSettings();
+    setSourceLang(options.sourceLang);
+    setTargetLang(options.targetLang);
+    // })();
+  }, [options.sourceLang, options.targetLang]);
 
   useEffect(() => {
 

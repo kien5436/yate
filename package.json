@@ -9,10 +9,10 @@
     "build-chromium": "cross-env BROWSER=chromium webpack",
     "pack-src": "zip -r -FS source.zip src INSTRUCTIONS.md package.json webpack.config.js yarn.lock tailwind.config.js babel.config.json",
     "release": "yarn build-ff && yarn web-ext-build && yarn pack-src",
-    "release-chromium": "yarn build-chromium && google-chrome --pack-extension=./yate --pack-extension-key=./yate.pem --disable-setuid-sandbox",
+    "release-chromium": "yarn build-chromium && yarn web-ext-build",
     "web-ext-build": "web-ext build -s yate -a . -o",
     "dev": "web-ext run -s yate -p dev",
-    "dev-chromium": "web-ext run -s yate -t chromium --chromium-binary google-chrome",
+    "dev-chromium": "web-ext run -s yate -t chromium --chromium-binary microsoft-edge --chromium-profile ~/.config/microsoft-edge/Default",
     "web-ext-lint": "web-ext lint -s yate"
   },
   "devDependencies": {

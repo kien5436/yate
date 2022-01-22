@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
 
     if (options.darkTheme) {
-      document.querySelector('html').classList.add('yate-dark');
+      document.documentElement.classList.add('yate-dark');
     }
   }, [options.darkTheme]);
 

@@ -41,10 +41,10 @@ export default function App() {
   useEffect(() => {
 
     if (options.darkTheme) {
-      document.querySelector('html').classList.add('yate-dark');
+      document.documentElement.classList.add('yate-dark');
     }
     else {
-      document.querySelector('html').classList.remove('yate-dark');
+      document.documentElement.classList.remove('yate-dark');
     }
   }, [options.darkTheme]);
 

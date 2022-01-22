@@ -11,22 +11,38 @@ import LanguageSelection from '../components/LanguageSelection';
 import { useBackgroundTranslation } from '../hooks/useTranslation';
 import useSettings from '../hooks/useSettings';
 
-function MainPanel() {
+function computeTooltipPosition(tooltipWidth, tooltipHeight) {
+  const { x, y, width, height } = window.getSelection().getRangeAt(0)
+    .getBoundingClientRect();
+
+  return {
+    left: parseInt(x + window.scrollX + width / 2 - tooltipWidth / 2, 10),
+    top: parseInt(y + window.scrollY + (y + window.scrollY + tooltipHeight + 10 >= document.documentElement.scrollHeight ? -10 - tooltipHeight : height + 10), 10),
+  };
+}
+
+function Tooltip() {
 
   /** @type import('preact/hooks').MutableRef<HTMLElement> */
   const popBtn = useRef(null);
   /** @type import('preact/hooks').MutableRef<HTMLElement> */
   const popPanel = useRef(null);
+  const [timer, setTimer] = useState(null);
+  const [scale, setScale] = useState(1);
   const [options, setOptions] = useSettings();
   const { result, text, setText, sourceLang, setSourceLang, targetLang, setTargetLang } = useBackgroundTranslation();
-  const showTranslationPanel = useCallback((e) => {
+  const showTranslationPanel = useCallback(() => {
+
+    const { left, top } = computeTooltipPosition(panelSize, panelSize);
 
     options.translateWithButton && popBtn.current.classList.add('yate-hidden');
-    popPanel.current.style.setProperty('left', `${e.pageX}px`);
-    popPanel.current.style.setProperty('top', `${e.pageY}px`);
+    popPanel.current.style.setProperty('left', `${left}px`);
+    popPanel.current.style.setProperty('top', `${top}px`);
+    popPanel.current.style.setProperty('transform', `scale(${scale})`);
     popPanel.current.classList.remove('yate-hidden');
-  }, [options.translateWithButton]);
-  const [timer, setTimer] = useState(null);
+  }, [options.translateWithButton, scale]);
+  const btnSize = 24;
+  const panelSize = 256;
 
   useEffect(() => {
 
@@ -42,6 +58,7 @@ function MainPanel() {
   useEffect(() => {
 
     const style = document.createElement('style');
+    const rootFontSize = parseFloat(window.getComputedStyle(document.querySelector('html'), null).getPropertyValue('font-size'));
     style.innerText = `@font-face {
     font-family: 'Nunito';
     font-style: normal;
@@ -65,6 +82,7 @@ function MainPanel() {
   }`.replace(/\s|\n/g, '');
 
     document.head.append(style);
+    setScale(16 / rootFontSize);
   }, []);
 
   useEffect(() => {
@@ -101,39 +119,43 @@ function MainPanel() {
 
       if (options.translateWithButton) {
 
-        showTranslationButton(e);
+        showTranslationButton();
 
         const timeout = setTimeout(() => options.translateWithButton && popBtn.current.classList.add('yate-hidden')
           , 2000);
         setTimer(timeout);
       }
       else {
-        showTranslationPanel(e);
+        showTranslationPanel();
       }
     }
 
-    /** @param {MouseEvent} e */
-    function showTranslationButton(e) {
-      popBtn.current.style.setProperty('left', `${e.pageX}px`);
-      popBtn.current.style.setProperty('top', `${e.pageY}px`);
+    function showTranslationButton() {
+
+      const { left, top } = computeTooltipPosition(btnSize, btnSize);
+
+      popBtn.current.style.setProperty('left', `${left}px`);
+      popBtn.current.style.setProperty('top', `${top}px`);
+      popBtn.current.style.setProperty('transform', `scale(${scale})`);
       popBtn.current.classList.remove('yate-hidden');
     }
 
     document.addEventListener('mouseup', showPopup, false);
 
     return () => document.removeEventListener('mouseup', showPopup, false);
-  }, [options.translateWithButton, showTranslationPanel, timer]);
+  }, [options.translateWithButton, scale, showTranslationPanel, timer]);
 
   return (
     <Fragment>
       {options.translateWithButton &&
         <img ref={popBtn}
           src={runtime.getURL(appIcon)}
-          className="yate-absolute yate-cursor-pointer yate-overflow-hidden yate-border yate-border-gray-300 yate-rounded-sm yate-w-6 yate-h-6 yate-z-max yate-p-0.5 yate-bg-white yate-hidden dark:yate-bg-gray-900"
-          // onClick={}
+          className="yate-absolute yate-cursor-pointer yate-overflow-hidden yate-border yate-border-gray-300 yate-rounded-sm yate-w-6 yate-h-6 yate-z-max yate-p-0.5 yate-bg-white yate-origin-top-left yate-hidden dark:yate-bg-gray-900"
+          onClick={showTranslationPanel}
         />}
       <div ref={popPanel}
-        className="yate-absolute yate-w-64 yate-max-h-64 yate-overflow-hidden yate-bg-white yate-rounded yate-shadow yate-z-max yate-text-base yate-text-gray-800 yate-hidden dark:yate-bg-gray-900 dark:yate-shadow-dark">
+        className="yate-absolute yate-w-64 yate-max-h-64 yate-overflow-hidden yate-bg-white yate-rounded yate-shadow yate-z-max yate-text-base yate-text-gray-800 yate-origin-top-left yate-hidden dark:yate-bg-gray-900 dark:yate-shadow-dark"
+      >
         <div className="yate-shadow">
           <LanguageSelection className="yate-p-2"
             sourceLang={sourceLang}
@@ -144,23 +166,23 @@ function MainPanel() {
         <div className="has-scrollbar yate-overflow-auto yate-py-3"
           style={{ maxHeight: 'calc(16rem - 2.75rem)' }}>
           {result.error && <p className="yate-text-sm yate-text-gray-600 dark:yate-text-gray-300 yate-px-3 yate-m-0">{result.error}</p>}
-          {result.spelling && <Article text={text}
+          <Article text={text}
             smallText={result.spelling}
-            className="yate-mb-2"
-            lang={sourceLang} />}
+            className="yate-mb-2 last:yate-mb-0"
+            lang={sourceLang} />
           {result.trans && <Article text={result.trans}
-            className="yate-mb-2"
+            className="yate-mb-2 last:yate-mb-0"
             lang={targetLang} />}
           {result.synonyms &&
             result.synonyms.map(({ type, terms }) => (
               <Fragment key={type}>
                 <p className="yate-text-sm yate-pl-2 yate-text-blue-400 yate-font-bold yate-mb-1">{type}</p>
-                {terms.map(({ word, reverseTranslation }, i) =>
+                {terms.map(({ word, reverseTranslation }) =>
                   <Article key={word}
                     text={word}
                     smallText={reverseTranslation}
                     lang={targetLang}
-                    className={i === terms.length - 1 ? '' : 'yate-mb-2'} />)}
+                    className='yate-mb-2 last:yate-mb-0' />)}
               </Fragment>
             ))}
         </div>
@@ -173,4 +195,4 @@ const root = document.createElement('div');
 root.id = 'yate';
 
 document.body.append(root);
-render(<MainPanel />, root);
+render(<Tooltip />, root);

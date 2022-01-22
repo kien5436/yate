@@ -57,7 +57,7 @@ export default function ComboBox({ className = '', defaultLang, onLangChange, la
     <div className={`yate-relative ${className}`}>
       <input
         type="text"
-        className="!yate-border !yate-border-gray-300 !yate-rounded !yate-px-2 !yate-py-1 !yate-text-sm yate-w-full !yate-bg-transparent yate-max-h-8 !yate-m-0 yate-transition focus:yate-outline-none focus:!yate-shadow-none focus:!yate-border-blue-400 dark:!yate-text-gray-200 dark:!yate-border-gray-700 dark:focus:!yate-border-blue-400"
+        className="!yate-border !yate-border-gray-300 !yate-rounded !yate-px-2 !yate-py-1 !yate-text-sm yate-w-full !yate-min-w-full !yate-bg-transparent yate-max-h-8 !yate-m-0 yate-transition focus:yate-outline-none focus:!yate-shadow-none focus:!yate-border-blue-400 dark:!yate-text-gray-200 dark:!yate-border-gray-700 dark:focus:!yate-border-blue-400"
         placeholder={i18n.getMessage('placeholderSelectLanguage')}
         defaultValue={selectedLangName}
         value={typing ? input : selectedLangName}
@@ -65,7 +65,7 @@ export default function ComboBox({ className = '', defaultLang, onLangChange, la
         onBlur={toggleDropdown}
         onInput={filterLanguage}
       />
-      <div className="yate-absolute yate-left-0 yate-top-6 yate-w-full yate-rounded-b yate-shadow-md yate-bg-white yate-max-h-40 yate-overflow-hidden yate-z-10 yate-border yate-border-t-0 yate-border-solid !yate-border-blue-400 yate-hidden dark:yate-bg-gray-900"
+      <div className="yate-absolute yate-left-0 yate-top-6 yate-w-full yate-rounded-b yate-shadow-md yate-bg-white yate-max-h-40 yate-overflow-hidden yate-z-10 yate-border yate-border-t-0 !yate-border-solid !yate-border-blue-400 yate-hidden dark:yate-bg-gray-900"
         ref={dropdown}>
         <ul className="yate-py-1 yate-max-h-40 yate-overflow-y-auto has-scrollbar yate-text-sm yate-m-0">
           {

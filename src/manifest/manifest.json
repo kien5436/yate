@@ -29,8 +29,8 @@
   "content_scripts": [{
     "all_frames": true,
     "css": [
-      "400.css",
-      "116.css"
+      "969.css",
+      "486.css"
     ],
     "js": [
       "512.js",
