@@ -293,3 +293,38 @@ function getResult(data) {
 
   return result;
 }
+
+/**
+ * Split a long text into chunks. Make sure the words are not truncated
+ * @param {string} text
+ * @param {number} chunkLength
+ */
+function splitSafe(text, chunkLength) {
+
+  const words = text.trim().replace(/\s{2,}/g, ' ')
+    .split(' ');
+  const chunks = [];
+  let chunk = '';
+
+  for (let i = 0, len = words.length; i < len; ++i) {
+
+    chunk += `${words[i]} `;
+
+    if (chunk.length > chunkLength) {
+
+      chunk = chunk.substring(0, chunk.trim().lastIndexOf(' ')).trim();
+
+      chunks.push(chunk);
+
+      chunk = '';
+      i--;
+    }
+
+    if (i === len - 1) {
+
+      chunks.push(chunk.trim());
+    }
+  }
+
+  return chunks;
+}

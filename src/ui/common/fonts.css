@@ -43,6 +43,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.feather-radio:before {
+  content: "\e906";
+}
+
 .feather-github:before {
   content: "\e901";
 }

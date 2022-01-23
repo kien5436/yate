@@ -4,6 +4,7 @@ export default class AudioPlayer {
   constructor(src) {
     this.src = src;
     this.audio = null;
+    this.paused = true;
   }
 
   pause() {
@@ -11,6 +12,7 @@ export default class AudioPlayer {
 
     this.audio.pause();
     this.audio = null;
+    this.paused = true;
   }
 
   play() {
@@ -24,13 +26,19 @@ export default class AudioPlayer {
 
       this.audio = new Audio(reader.result);
 
-      this.audio.addEventListener('error', () => console.error('audio.js:17: error while playing audio'), false);
+      this.audio.addEventListener('error', () => {
+
+        this.paused = true;
+        console.error('audio.js:32: error while playing audio');
+      }, false);
 
       this.audio.addEventListener('ended', function() {
         this.audio = null;
+        this.paused = true;
       }, false);
 
       this.audio.play();
+      this.paused = false;
     }, false);
 
     reader.readAsDataURL(this.src);

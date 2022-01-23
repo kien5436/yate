@@ -150,22 +150,22 @@ function Tooltip() {
       {options.translateWithButton &&
         <img ref={popBtn}
           src={runtime.getURL(appIcon)}
-          className="yate-absolute yate-cursor-pointer yate-overflow-hidden yate-border yate-border-gray-300 yate-rounded-sm yate-w-6 yate-h-6 yate-z-max yate-p-0.5 yate-bg-white yate-origin-top-left yate-hidden dark:yate-bg-gray-900"
+          className="yate-absolute yate-cursor-pointer yate-overflow-hidden yate-border yate-border-gray-300 yate-rounded-sm yate-w-6 yate-h-6 yate-z-max yate-p-0.5 yate-bg-white yate-origin-top-left yate-box-border yate-hidden dark:yate-bg-gray-900"
           onClick={showTranslationPanel}
         />}
       <div ref={popPanel}
-        className="yate-absolute yate-w-64 yate-max-h-64 yate-overflow-hidden yate-bg-white yate-rounded yate-shadow yate-z-max yate-text-base yate-text-gray-800 yate-origin-top-left yate-hidden dark:yate-bg-gray-900 dark:yate-shadow-dark"
+        className="yate-absolute yate-w-64 yate-max-h-64 yate-overflow-hidden yate-bg-white yate-rounded yate-shadow yate-z-max yate-text-base yate-text-gray-800 yate-origin-top-left yate-box-border yate-hidden dark:yate-bg-gray-900 dark:yate-shadow-dark"
       >
         <div className="yate-shadow">
-          <LanguageSelection className="yate-p-2"
+          <LanguageSelection className="yate-p-2 yate-box-border"
             sourceLang={sourceLang}
             setSourceLang={setSourceLang}
             targetLang={targetLang}
             setTargetLang={setTargetLang} />
         </div>
-        <div className="has-scrollbar yate-overflow-auto yate-py-3"
+        <div className="has-scrollbar yate-overflow-auto yate-py-3 yate-box-border"
           style={{ maxHeight: 'calc(16rem - 2.75rem)' }}>
-          {result.error && <p className="yate-text-sm yate-text-gray-600 dark:yate-text-gray-300 yate-px-3 yate-m-0">{result.error}</p>}
+          {result.error && <p className="yate-text-sm yate-text-gray-600 yate-box-border dark:yate-text-gray-300 yate-px-3 yate-m-0">{result.error}</p>}
           <Article text={text}
             smallText={result.spelling}
             className="yate-mb-2 last:yate-mb-0"
@@ -176,7 +176,7 @@ function Tooltip() {
           {result.synonyms &&
             result.synonyms.map(({ type, terms }) => (
               <Fragment key={type}>
-                <p className="yate-text-sm yate-pl-2 yate-text-blue-400 yate-font-bold yate-mb-1">{type}</p>
+                <p className="yate-text-sm yate-pl-2 yate-text-blue-400 yate-font-bold yate-mb-1 yate-box-border">{type}</p>
                 {terms.map(({ word, reverseTranslation }) =>
                   <Article key={word}
                     text={word}

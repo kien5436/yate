@@ -1,6 +1,6 @@
 module.exports = (browser) => {
 
-  const version = '1.1.2';
+  const version = '1.1.4';
 
   switch (browser) {
 

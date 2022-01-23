@@ -9,8 +9,8 @@ import { extensionUrl } from '../../settings';
 import Icon from '../components/Icon';
 import LanguageSelection from '../components/LanguageSelection';
 import TextBox from '../components/TextBox';
+import { useBackgroundTranslation } from '../hooks/useTranslation';
 import useSettings from '../hooks/useSettings';
-import { useTranslation } from '../hooks/useTranslation';
 
 function App() {
   const [options] = useSettings();
@@ -22,7 +22,7 @@ function App() {
     sourceLang,
     targetLang,
     text,
-  } = useTranslation();
+  } = useBackgroundTranslation();
 
   useEffect(() => {
 
@@ -73,7 +73,7 @@ function App() {
 
     setSourceLang(targetLang);
     setTargetLang(tmp);
-    setText(result);
+    setText(result.trans);
   }
 
   function openSettings() {
@@ -116,7 +116,7 @@ function App() {
           setValue={setText} />
         <TextBox readOnly={true}
           lang={targetLang}
-          value={result} />
+          value={result.trans || result.error} />
       </div>
     </div>
   );

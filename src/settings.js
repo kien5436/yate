@@ -24,7 +24,7 @@ export default async function getSettings() {
   }
 }
 
-export const extensionUrl = 'firefox' === ua() ? 'https://addons.mozilla.org/en-US/firefox/addon/yate/' : '';
+export const extensionUrl = 'firefox' === ua() ? 'https://addons.mozilla.org/en-US/firefox/addon/yate/' : 'https://microsoftedge.microsoft.com/addons/detail/dimpiplalplpcfdkgjciifgjobpniofa';
 
 function ua() {
   if (-1 !== navigator.userAgent.indexOf("Chrome")) {

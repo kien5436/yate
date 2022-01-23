@@ -24,13 +24,13 @@ export default function Article({ text, smallText, className = '', lang }) {
 
   return (
     <div className={`yate-flex ${className}`}>
-      <div className="yate-w-11/12 yate-pl-3">
-        <p className="dark:yate-text-gray-200 yate-m-0">{text}</p>
-        {smallText && <p className="yate-text-sm yate-text-gray-600 dark:yate-text-gray-300 yate-m-0">{smallText}</p>}
+      <div className="yate-w-11/12 yate-pl-3 yate-box-border">
+        <p className="dark:yate-text-gray-200 yate-m-0 yate-box-border">{text}</p>
+        {smallText && <p className="yate-text-sm yate-box-border yate-text-gray-600 dark:yate-text-gray-300 yate-m-0">{smallText}</p>}
       </div>
-      <div className="yate-px-2">
+      <div className="yate-px-2 yate-box-border">
         <Icon name="feather-volume"
-          className="yate-cursor-pointer dark:yate-text-gray-200"
+          className="yate-cursor-pointer yate-box-border dark:yate-text-gray-200"
           onClick={readText} />
       </div>
     </div>
