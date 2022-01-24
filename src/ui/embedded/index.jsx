@@ -34,6 +34,9 @@ function Tooltip() {
   const showTranslationPanel = useCallback(() => {
 
     const { left, top } = computeTooltipPosition(panelSize, panelSize);
+    const selectedText = window.getSelection().toString()
+      .trim();
+    setText(selectedText);
 
     options.translateWithButton && popBtn.current.classList.add('yate-hidden');
     popPanel.current.style.setProperty('left', `${left}px`);
@@ -107,7 +110,7 @@ function Tooltip() {
 
       options.translateWithButton && popBtn.current.classList.add('yate-hidden');
       popPanel.current.classList.add('yate-hidden');
-      setText(selectedText);
+      setText('');
 
       if (timer) {
 

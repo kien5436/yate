@@ -28,7 +28,7 @@ export function useBackgroundTranslation() {
       setSourceLang((prevSourceLang) => (message.translation.sourceLang && 'auto' === prevSourceLang ? message.translation.sourceLang : prevSourceLang));
 
       try {
-        const key = mummumHash(text + sourceLang + targetLang);
+        const key = mummumHash(message.key);
         /** @type {{indexes: string[] | undefined}} */
         const existedResult = await storage.local.get([key, 'indexes']);
 
@@ -57,7 +57,7 @@ export function useBackgroundTranslation() {
     setPort(port);
 
     return () => port.onMessage.removeListener(onReceiveMessage);
-  }, [sourceLang, targetLang, text]);
+  }, []);
 
   useEffect(() => {
 

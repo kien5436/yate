@@ -58,7 +58,7 @@ async function doTranslate(message, port) {
 
   try {
     const translation = await translate(message.text, message.sourceLang, message.targetLang);
-    port.postMessage({ translation });
+    port.postMessage({ key: message.text + message.sourceLang + message.targetLang, translation });
   }
   catch (err) {
     console.error('broadcast.js:45:', err);

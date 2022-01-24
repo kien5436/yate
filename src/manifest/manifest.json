@@ -30,14 +30,14 @@
     "all_frames": true,
     "css": [
       "969.css",
-      "486.css"
+      "269.css"
     ],
     "js": [
       "512.js",
       "396.js",
       "969.js",
-      "486.js",
-      "389.js",
+      "269.js",
+      "545.js",
       "embedded.js"
     ],
     "matches": [

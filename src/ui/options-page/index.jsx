@@ -99,7 +99,10 @@ export default function App() {
           <img src={runtime.getURL(appIcon)}
             className="yate-w-8 yate-h-8 yate-mr-3" />
           <h3 className="dark:yate-text-gray-200">
-            <p className="yate-font-bold yate-text-xl">{i18n.getMessage('extensionName')}</p>
+            <p className="yate-font-bold yate-text-xl">
+              {i18n.getMessage('extensionName')}
+              <small> {runtime.getManifest().version}</small>
+            </p>
             <p>{i18n.getMessage('description')}</p>
           </h3>
         </a>
