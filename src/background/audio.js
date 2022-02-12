@@ -1,5 +1,11 @@
 export default class AudioPlayer {
 
+  src = null;
+
+  audio = null;
+
+  paused = true;
+
   /** @param {Blob} src */
   constructor(src) {
     this.src = src;
@@ -16,31 +22,36 @@ export default class AudioPlayer {
   }
 
   play() {
-    if (null !== this.audio) {
-      this.pause();
-    }
 
-    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
 
-    reader.addEventListener('loadend', () => {
+      if (null !== this.audio) {
+        this.pause();
+      }
 
-      this.audio = new Audio(reader.result);
+      const reader = new FileReader();
 
-      this.audio.addEventListener('error', () => {
+      reader.addEventListener('loadend', () => {
 
-        this.paused = true;
-        console.error('audio.js:32: error while playing audio');
+        this.audio = new Audio(reader.result);
+
+        this.audio.addEventListener('error', () => {
+
+          this.paused = true;
+          reject('audio.js:41: error while playing audio');
+        }, false);
+
+        this.audio.addEventListener('ended', () => {
+          this.audio = null;
+          this.paused = true;
+          resolve();
+        }, false);
+
+        this.paused = false;
+        this.audio.play();
       }, false);
 
-      this.audio.addEventListener('ended', function() {
-        this.audio = null;
-        this.paused = true;
-      }, false);
-
-      this.audio.play();
-      this.paused = false;
-    }, false);
-
-    reader.readAsDataURL(this.src);
+      reader.readAsDataURL(this.src);
+    });
   }
 }

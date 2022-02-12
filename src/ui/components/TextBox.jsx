@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef } from 'preact/hooks';
+import { useCallback, useRef } from 'preact/hooks';
 import { h } from 'preact';
 import { runtime } from 'webextension-polyfill';
 
 import '../common/scrollbar';
 import debounce from '../common/debounce';
 import Icon from "./Icon";
+import { MAX_TEXT_LEN } from '../../background/api';
 
 /**
  * @param {{
@@ -14,14 +15,19 @@ import Icon from "./Icon";
  *  value: string,
  *  setValue: Function,
  *  playSound: Function<Promise>,
+ *  port: import('webextension-polyfill').Runtime.Port,
  * }} props
  */
-export default function TextBox({ readOnly = false, autoFocus = false, lang, value, setValue }) {
+export default function TextBox({ readOnly = false, autoFocus = false, lang, value, setValue, port }) {
   const textRef = useRef(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSetValue = useCallback(debounce(setValue, 700), []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedPlaySound = useCallback(debounce((text, targetLang) => runtime.sendMessage({ targetLang, text }), 700), []);
+  const debouncedPlaySound = useCallback(debounce((text, targetLang) => port.postMessage({
+    action: 'tts',
+    targetLang,
+    text,
+  }), 700), []);
 
   function resetValue() {
     setValue('');
@@ -33,7 +39,8 @@ export default function TextBox({ readOnly = false, autoFocus = false, lang, val
   }
 
   function readText() {
-    if ('' !== value) debouncedPlaySound(value, lang);
+
+    if (value) debouncedPlaySound(value, lang);
   }
 
   return (
@@ -41,7 +48,7 @@ export default function TextBox({ readOnly = false, autoFocus = false, lang, val
       <textarea
         ref={textRef}
         className="yate-resize-none yate-h-full yate-w-full yate-p-3 yate-pr-10 has-scrollbar yate-outline-none yate-bg-transparent dark:yate-text-gray-200"
-        maxLength={1000}
+        maxLength={MAX_TEXT_LEN}
         rows={10}
         readOnly={readOnly}
         autoFocus={autoFocus}

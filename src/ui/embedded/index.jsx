@@ -30,7 +30,8 @@ function Tooltip() {
   const [timer, setTimer] = useState(null);
   const [scale, setScale] = useState(1);
   const [options, setOptions] = useSettings();
-  const { result, text, setText, sourceLang, setSourceLang, targetLang, setTargetLang } = useBackgroundTranslation();
+  const [port] = useState(runtime.connect);
+  const { result, text, setText, sourceLang, setSourceLang, targetLang, setTargetLang } = useBackgroundTranslation(port);
   const showTranslationPanel = useCallback(() => {
 
     const { left, top } = computeTooltipPosition(panelSize, panelSize);
@@ -118,7 +119,11 @@ function Tooltip() {
         setTimer(null);
       }
 
-      if ('' === selectedText) return;
+      if ('' === selectedText) {
+
+        port.postMessage({ action: 'stop' });
+        return;
+      }
 
       if (options.translateWithButton) {
 
@@ -146,7 +151,7 @@ function Tooltip() {
     document.addEventListener('mouseup', showPopup, false);
 
     return () => document.removeEventListener('mouseup', showPopup, false);
-  }, [options.translateWithButton, scale, showTranslationPanel, timer]);
+  }, [options.translateWithButton, port, scale, showTranslationPanel, timer]);
 
   return (
     <Fragment>
@@ -169,11 +174,15 @@ function Tooltip() {
         <div className="has-scrollbar yate-overflow-auto yate-py-3 yate-box-border"
           style={{ maxHeight: 'calc(16rem - 2.75rem)' }}>
           {result.error && <p className="yate-text-sm yate-text-gray-600 yate-box-border dark:yate-text-gray-300 yate-px-3 yate-m-0">{result.error}</p>}
-          <Article text={text}
+          {text && <Article
+            port={port}
+            text={text}
             smallText={result.spelling}
             className="yate-mb-2 last:yate-mb-0"
-            lang={sourceLang} />
-          {result.trans && <Article text={result.trans}
+            lang={sourceLang} />}
+          {result.trans && <Article
+            port={port}
+            text={result.trans}
             className="yate-mb-2 last:yate-mb-0"
             lang={targetLang} />}
           {result.synonyms &&
@@ -181,7 +190,9 @@ function Tooltip() {
               <Fragment key={type}>
                 <p className="yate-text-sm yate-pl-2 yate-text-blue-400 yate-font-bold yate-mb-1 yate-box-border">{type}</p>
                 {terms.map(({ word, reverseTranslation }) =>
-                  <Article key={word}
+                  <Article
+                    port={port}
+                    key={word}
                     text={word}
                     smallText={reverseTranslation}
                     lang={targetLang}

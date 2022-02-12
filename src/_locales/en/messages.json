@@ -67,5 +67,8 @@
   },
   "openPopup": {
     "message": "Open translation panel"
+  },
+  "tooLongText": {
+    "message": "Sorry, the maximum length of text is $1"
   }
 }

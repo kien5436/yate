@@ -11,7 +11,7 @@
     "release": "yarn build-ff && yarn web-ext-build && yarn pack-src",
     "release-chromium": "yarn build-chromium && yarn web-ext-build",
     "web-ext-build": "web-ext build -s yate -a . -o",
-    "dev": "web-ext run -s yate -p dev",
+    "dev": "web-ext run -s yate -p dev -f firefoxdeveloperedition",
     "dev-chromium": "web-ext run -s yate -t chromium --chromium-binary microsoft-edge --chromium-profile ~/.config/microsoft-edge/Default",
     "web-ext-lint": "web-ext lint -s yate"
   },

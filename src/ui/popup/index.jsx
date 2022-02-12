@@ -1,6 +1,6 @@
 import { h, render } from 'preact';
 import { i18n, runtime, storage } from 'webextension-polyfill';
-import { useEffect } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 
 import '../common/reset';
 import '../common/fonts';
@@ -14,6 +14,7 @@ import useSettings from '../hooks/useSettings';
 
 function App() {
   const [options] = useSettings();
+  const [port] = useState(runtime.connect);
   const {
     result,
     setSourceLang,
@@ -22,7 +23,7 @@ function App() {
     sourceLang,
     targetLang,
     text,
-  } = useBackgroundTranslation();
+  } = useBackgroundTranslation(port);
 
   useEffect(() => {
 
@@ -50,7 +51,7 @@ function App() {
       }
 
     })();
-  }, [options.keepHistory, setText]);
+  }, [options.keepHistory]);
 
   useEffect(() => {
 
@@ -110,11 +111,15 @@ function App() {
         setTargetLang={setTargetLang}
         swapLanguage={swapLanguage} />
       <div className="yate-flex yate-divide-x yate-divide-gray-300 yate-border-t yate-border-gray-300 dark:yate-divide-gray-700 dark:yate-border-gray-700">
-        <TextBox autoFocus={true}
+        <TextBox
+          port={port}
+          autoFocus={true}
           lang={sourceLang}
           value={text}
           setValue={setText} />
-        <TextBox readOnly={true}
+        <TextBox
+          port={port}
+          readOnly={true}
           lang={targetLang}
           value={result.trans || result.error} />
       </div>

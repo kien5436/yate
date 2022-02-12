@@ -115,6 +115,10 @@ export const langs = {
   Yoruba: 'yo',
   Zulu: 'zu',
 };
+export const abortController = new AbortController();
+const signal = abortController.signal;
+export const ERROR_BLOCKED_BY_SERVER = 1;
+export const MAX_TEXT_LEN = 20000;
 
 /**
  * @param {sring} text
@@ -139,7 +143,7 @@ export async function translate(text, sourceLang = 'auto', targetLang = 'vi') {
     return getResult(data);
   }
 
-  throw Error('Blocked for requesting too much');
+  throw error();
 }
 
 export function openInGoogleTranslate(pageUrl, targetLang = 'vi') {
@@ -184,9 +188,14 @@ export async function tts(text, targetLang) {
       'User-Agent': navigator.userAgent,
     },
     method: 'GET',
+    signal,
   });
 
-  return await res.blob();
+  if (200 === res.status) {
+    return await res.blob();
+  }
+
+  throw error();
 }
 
 function buildRequestOptions(fallback = false) {
@@ -201,6 +210,7 @@ function buildRequestOptions(fallback = false) {
       'User-Agent': navigator.userAgent,
     },
     method: 'GET',
+    signal,
   };
 }
 
@@ -294,37 +304,10 @@ function getResult(data) {
   return result;
 }
 
-/**
- * Split a long text into chunks. Make sure the words are not truncated
- * @param {string} text
- * @param {number} chunkLength
- */
-function splitSafe(text, chunkLength) {
+function error() {
 
-  const words = text.trim().replace(/\s{2,}/g, ' ')
-    .split(' ');
-  const chunks = [];
-  let chunk = '';
+  const err = new Error('Blocked for requesting too much');
+  err.code = ERROR_BLOCKED_BY_SERVER;
 
-  for (let i = 0, len = words.length; i < len; ++i) {
-
-    chunk += `${words[i]} `;
-
-    if (chunk.length > chunkLength) {
-
-      chunk = chunk.substring(0, chunk.trim().lastIndexOf(' ')).trim();
-
-      chunks.push(chunk);
-
-      chunk = '';
-      i--;
-    }
-
-    if (i === len - 1) {
-
-      chunks.push(chunk.trim());
-    }
-  }
-
-  return chunks;
+  return err;
 }

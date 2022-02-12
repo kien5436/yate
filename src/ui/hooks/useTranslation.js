@@ -4,15 +4,27 @@ import { useCallback, useEffect, useState } from "preact/hooks";
 import mummumHash from '../common/hash';
 import useSettings from "./useSettings";
 
-export function useBackgroundTranslation() {
+/**
+ * @param {import("webextension-polyfill").Runtime.Port} port
+ * @return {{
+    result: { error: string } | { trans: string },
+    setSourceLang: import("preact/hooks").StateUpdater<string>,
+    setTargetLang: import("preact/hooks").StateUpdater<string>,
+    setText: import("preact/hooks").StateUpdater<string>,
+    sourceLang: string,
+    targetLang: string,
+    text: string,
+  }}
+ */
+export function useBackgroundTranslation(port) {
 
   const [options] = useSettings();
   const [sourceLang, setSourceLang] = useState(options.sourceLang);
   const [targetLang, setTargetLang] = useState(options.targetLang);
   const [text, setText] = useState('');
   const [result, setResult] = useState({ trans: '' });
-  const [port, setPort] = useState(null);
-  const connectToBackground = useCallback(() => {
+
+  useEffect(() => {
 
     async function onReceiveMessage(message) {
 
@@ -51,26 +63,16 @@ export function useBackgroundTranslation() {
       // }
     }
 
-    const port = runtime.connect();
-
     port.onMessage.addListener(onReceiveMessage);
-    setPort(port);
 
     return () => port.onMessage.removeListener(onReceiveMessage);
-  }, []);
+  }, [port]);
 
   useEffect(() => {
 
     setSourceLang(options.sourceLang);
     setTargetLang(options.targetLang);
   }, [options.sourceLang, options.targetLang]);
-
-  useEffect(() => {
-
-    const cleanup = connectToBackground();
-
-    return () => cleanup();
-  }, [connectToBackground]);
 
   useEffect(() => {
 
@@ -90,6 +92,7 @@ export function useBackgroundTranslation() {
           if (undefined === result) {
 
             port.postMessage({
+              action: 'translate',
               sourceLang,
               targetLang,
               text: sourceText,
