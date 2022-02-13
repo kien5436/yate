@@ -51,13 +51,21 @@ function Tooltip() {
   useEffect(() => {
 
     function onReceiveMessage(message) {
-      setOptions((prevOptions) => ({ ...prevOptions, ...message.options }));
+
+      if (message.options) {
+
+        setOptions((prevOptions) => ({ ...prevOptions, ...message.options }));
+      }
+      else if ('showTranslationPanel' === message.action) {
+
+        showTranslationPanel();
+      }
     }
 
     runtime.onMessage.addListener(onReceiveMessage);
 
     return () => runtime.onMessage.removeListener(onReceiveMessage);
-  }, []);
+  }, [showTranslationPanel]);
 
   useEffect(() => {
 
@@ -112,6 +120,7 @@ function Tooltip() {
       options.translateWithButton && popBtn.current.classList.add('yate-hidden');
       popPanel.current.classList.add('yate-hidden');
       setText('');
+      port.postMessage({ action: 'stop' });
 
       if (timer) {
 
@@ -120,8 +129,6 @@ function Tooltip() {
       }
 
       if ('' === selectedText) {
-
-        port.postMessage({ action: 'stop' });
         return;
       }
 

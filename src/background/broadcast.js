@@ -1,6 +1,7 @@
+/* eslint-disable no-await-in-loop */
 import { i18n, tabs } from 'webextension-polyfill';
 
-import { abortController, ERROR_BLOCKED_BY_SERVER, MAX_TEXT_LEN, translate, tts } from './api';
+import { ERROR_BLOCKED_BY_SERVER, MAX_TEXT_LEN, translate, tts } from './api';
 import AudioPlayer from './audio';
 
 const audio = new AudioPlayer();
@@ -70,7 +71,6 @@ async function onReceiveMessage(message, port) {
 function cancelActions(port) {
 
   console.debug('broadcast.js:49: disconnect');
-  abortController.abort();
 
   if (!audio.paused) {
     audio.pause();
@@ -86,7 +86,7 @@ function cancelActions(port) {
  * @param {import('webextension-polyfill').Runtime.Port} port
  */
 async function doTranslate(message, port) {
-  console.debug('broadcast.js:89: ', message.text.length);
+  // console.debug('broadcast.js:89: ', message.text.length);
 
   if (message.text.length > MAX_TEXT_LEN) {
 

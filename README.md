@@ -16,15 +16,21 @@ Yet another translation extension
   <img src="./docs/assets/firefox.png" alt="firefox" style="height: 60px" >
 </a>
 
+- Edge
+
+<a href="https://microsoftedge.microsoft.com/addons/detail/dimpiplalplpcfdkgjciifgjobpniofa">
+  <img src="./docs/assets/edge.png" alt="edge" style="height: 60px" >
+</a>
+
 - Chrome
 ```
 coming soon
 ```
 - Install from file (Chrome and Edge Chromium)
 
-  - Download the latest `.crx` from [this link](https://github.com/shhlkien/yate/releases)
+  - Download the latest `.zip` from [this link](https://github.com/shhlkien/yate/releases)
   - Open `chrome://extensions/` (`edge://extensions`) tab, drag and drop the downloaded file to this page
-  - If you see a message similar "Extensions Disabled", unpack `.crx` file then choose `Load unpacked`
+  - If you see a message similar "Extensions Disabled", unpack `.zip` file then choose `Load unpacked`
 
 ## Support me
 <a href="https://www.buymeacoffee.com/kien5436" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>

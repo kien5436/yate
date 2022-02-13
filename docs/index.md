@@ -30,15 +30,21 @@ Light theme | Dark theme
   <img src="./assets/firefox.png" alt="firefox" style="height: 60px" >
 </a>
 
+- Edge
+
+<a href="https://microsoftedge.microsoft.com/addons/detail/dimpiplalplpcfdkgjciifgjobpniofa">
+  <img src="./docs/assets/edge.png" alt="edge" style="height: 60px" >
+</a>
+
 - Chrome
 ```
 coming soon
 ```
 - Install from file (Chrome and Edge Chromium)
 
-  - Download the latest `.crx` from [this link](https://github.com/shhlkien/yate/releases)
+  - Download the latest `.zip` from [this link](https://github.com/shhlkien/yate/releases)
   - Open `chrome://extensions/` (`edge://extensions`) tab, drag and drop the downloaded file to this page
-  - If you see a message similar "Extensions Disabled", unpack `.crx` file then choose `Load unpacked`
+  - If you see a message similar "Extensions Disabled", unpack `.zip` file then choose `Load unpacked`
 
 ## Got a problem?
 

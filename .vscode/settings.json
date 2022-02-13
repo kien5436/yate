@@ -2,7 +2,7 @@
   "files.exclude": {
     "INSTRUCTIONS.md": true,
     ".jsbeautifyrc": true,
-    "babel.config.json": true,
+    "babel.config.js": true,
     "yarn.lock": true,
     ".gitattributes": true
   },
@@ -11,7 +11,7 @@
   "eslint.packageManager": "yarn",
   "beautify.ignore": [
     ".vscode/**",
-    "built/**",
+    "yate/**",
     "node_modules/**"
   ],
   "editor.codeActionsOnSave": {

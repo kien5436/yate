@@ -1,5 +1,5 @@
-import { contextMenus, i18n } from "webextension-polyfill";
-import { openInGoogleTranslate } from "./api";
+import { tabs as browserTabs, contextMenus, i18n } from 'webextension-polyfill';
+import { openInGoogleTranslate } from './api';
 
 export default function createMenu() {
 
@@ -21,12 +21,12 @@ export default function createMenu() {
  * @param {import("webextension-polyfill").Menus.OnClickData} param0
  * @param {import("webextension-polyfill").Tabs.Tab} param1
  */
-function onClick({ menuItemId }, { url }) {
+function onClick({ menuItemId }, { id, url }) {
 
   if ('translateFullPage' === menuItemId) {
     openInGoogleTranslate(url);
   }
   else if ('translateSelectedText' === menuItemId) {
-
+    browserTabs.sendMessage(id, { action: 'showTranslationPanel' });
   }
 }

@@ -115,8 +115,6 @@ export const langs = {
   Yoruba: 'yo',
   Zulu: 'zu',
 };
-export const abortController = new AbortController();
-const signal = abortController.signal;
 export const ERROR_BLOCKED_BY_SERVER = 1;
 export const MAX_TEXT_LEN = 20000;
 
@@ -154,7 +152,7 @@ export function openInGoogleTranslate(pageUrl, targetLang = 'vi') {
     u: pageUrl,
   }).toString();
 
-  browserTabs.update({ url: PAGE_TRANSLATION_URL + params }).catch((err) => console.error('api.js:145', err));
+  browserTabs.update({ url: PAGE_TRANSLATION_URL + params }).catch((err) => console.error('api.js:155', err));
 }
 
 /**
@@ -188,7 +186,6 @@ export async function tts(text, targetLang) {
       'User-Agent': navigator.userAgent,
     },
     method: 'GET',
-    signal,
   });
 
   if (200 === res.status) {
@@ -210,7 +207,6 @@ function buildRequestOptions(fallback = false) {
       'User-Agent': navigator.userAgent,
     },
     method: 'GET',
-    signal,
   };
 }
 

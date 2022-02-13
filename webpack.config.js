@@ -12,10 +12,10 @@ const TerserJSPlugin = require('terser-webpack-plugin');
 module.exports = {
   mode: 'production',
   entry: {
-    popup: './src/ui/popup/index.jsx',
-    embedded: './src/ui/embedded/index.jsx',
     background: './src/background/index.js',
+    embedded: './src/ui/embedded/index.jsx',
     options: './src/ui/options-page/index.jsx',
+    popup: './src/ui/popup/index.jsx',
   },
   output: {
     filename: '[name].js',
@@ -86,29 +86,16 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: './src/manifest/manifest.json',
-        to: '[name][ext]',
-        transform(content) {
-
-          const manifest = JSON.parse(content.toString());
-          const extraInfo = require('./src/manifest')(process.env.BROWSER);
-
-          for (const key in extraInfo)
-            manifest[key] = extraInfo[key];
-
-          return Promise.resolve(JSON.stringify(manifest));
+      patterns: [
+        {
+          from: './src/**/messages.json',
+          to: ({ absoluteFilename }) => absoluteFilename.substring(absoluteFilename.indexOf('_locales')),
+          transform: (content) => Promise.resolve(JSON.stringify(JSON.parse(content.toString()))),
         },
-      },
-      {
-        from: './src/**/messages.json',
-        to: ({ absoluteFilename }) => absoluteFilename.substring(absoluteFilename.indexOf('_locales')),
-        transform: (content) => Promise.resolve(JSON.stringify(JSON.parse(content.toString()))),
-      },
-      {
-        from: './src/res/**/*',
-        to: ({ absoluteFilename }) => absoluteFilename.substring(absoluteFilename.indexOf('res')),
-      },
+        {
+          from: './src/res/**/*',
+          to: ({ absoluteFilename }) => absoluteFilename.substring(absoluteFilename.indexOf('res')),
+        },
       ],
     }),
   ],
