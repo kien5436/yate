@@ -3,6 +3,7 @@
 
 const { watch } = require('chokidar');
 const { readFile, writeFile } = require('fs/promises');
+const { resolve } = require('path');
 
 const manifest = {
   manifest_version: 2,
@@ -51,50 +52,106 @@ const manifest = {
   version: '1.1.5',
 };
 
+async function writeToManifest(path, browser) {
+
+  try {
+    let data = '';
+
+    do {
+      // eslint-disable-next-line no-await-in-loop
+      data = await readFile(path, 'utf8');
+    } while ('' === data);
+
+    /** @type {{background: string[], embedded: string[]}} */
+    const assets = JSON.parse(data);
+    manifest.background.scripts = assets.background;
+    manifest.content_scripts[0].css = assets.embedded.filter((file) => file.endsWith('css'));
+    manifest.content_scripts[0].js = assets.embedded.filter((file) => file.endsWith('js'));
+
+    if ('firefox' === browser) {
+      manifest.browser_specific_settings = {
+        gecko: {
+          id: 'yate@kien5436.com',
+          strict_min_version: '90.0',
+        },
+      };
+    }
+    else {
+      manifest.minimum_chrome_version = '92.0';
+    }
+
+    await writeFile('./yate/manifest.json', JSON.stringify(manifest), 'utf8');
+
+    const date = new Date();
+    const now = new Date(date.getTime() + date.getTimezoneOffset() * 6e4 + 36e5 * 7);
+    const hour = now.getHours();
+    const min = now.getMinutes();
+    const sec = now.getSeconds();
+
+    console.log('\x1b[0m%s\x1b[34m %s\x1b[0m', `${10 > hour ? `0${hour}` : hour}:${10 > min ? `0${min}` : min}:${10 > sec ? `0${sec}` : sec}`, 'manifest is generated');
+  }
+  catch (err) {
+    console.error('\x1b[1m\x1b[31m%s \x1b[0m%s', err.name, err.message);
+  }
+}
+
+/**
+ * Thank to https://stackoverflow.com/a/54098693
+ *
+ * For this minimal process, there is two options only:
+ *
+ * `--browser`:  'firefox' or 'chromium'
+ *
+ * `-w`: for watching file changes
+ *
+ * @example
+ * ```
+ * node manifest.js --browser=firefox -w
+ * ```
+ *
+ * @return {{browser: 'firefox' | 'chromium', watch: boolean}}
+ */
+function parseArgs() {
+
+  const args = {};
+
+  process.argv
+    .slice(2, process.argv.length)
+    .forEach((arg) => {
+      // long arg
+      if ('--' === arg.slice(0, 2)) {
+
+        const longArg = arg.split('=');
+        const longArgFlag = longArg[0].slice(2, longArg[0].length);
+        const longArgValue = 1 < longArg.length ? longArg[1] : true;
+        args[longArgFlag] = longArgValue;
+      }
+      // flags
+      else if ('-' === arg[0]) {
+        const flags = arg.slice(1, arg.length).split('');
+        flags.forEach((flag) => {
+          args[flag === 'w' ? 'watch' : flag] = true;
+        });
+      }
+    });
+  return args;
+}
+
+const args = parseArgs();
+
+if (args.browser !== 'chromium' && args.browser !== 'firefox' && typeof args.watch !== 'boolean') {
+  return;
+}
+
+if (!args.watch) {
+
+  writeToManifest('./assets.json', args.browser);
+
+  return;
+}
+
 console.log('\x1b[1m\x1b[34m%s\x1b[0m', 'Watching for assets changes');
 
 watch('./assets.json', { interval: 5000 })
-
-  .on('change', async (path) => {
-
-    try {
-      let data = '';
-
-      do {
-        // eslint-disable-next-line no-await-in-loop
-        data = await readFile(path, 'utf8');
-      } while ('' === data);
-
-      /** @type {{background: string[], embedded: string[]}} */
-      const assets = JSON.parse(data);
-      manifest.background.scripts = assets.background;
-      manifest.content_scripts[0].css = assets.embedded.filter((file) => file.endsWith('css'));
-      manifest.content_scripts[0].js = assets.embedded.filter((file) => file.endsWith('js'));
-
-      if ('firefox' === process.env.BROWSER) {
-        manifest.browser_specific_settings = {
-          gecko: {
-            id: 'yate@kien5436.com',
-            strict_min_version: '90.0',
-          },
-        };
-      }
-      else {
-        manifest.minimum_chrome_version = '92.0';
-      }
-
-      await writeFile('./yate/manifest.json', JSON.stringify(manifest), 'utf8');
-
-      const date = new Date();
-      const now = new Date(date.getTime() + date.getTimezoneOffset() * 6e4 + 36e5 * 7);
-      const hour = now.getHours();
-      const min = now.getMinutes();
-      const sec = now.getSeconds();
-
-      console.log('\x1b[0m%s\x1b[34m %s\x1b[0m', `${10 > hour ? `0${hour}` : hour}:${10 > min ? `0${min}` : min}:${10 > sec ? `0${sec}` : sec}`, 'manifest is generated');
-    }
-    catch (err) {
-      console.error('\x1b[1m\x1b[31m%s \x1b[0m%s', err.name, err.message);
-    }
-  })
+  .on('change', (path) => writeToManifest(path, args.browser))
   .on('error', (err) => console.error(err));

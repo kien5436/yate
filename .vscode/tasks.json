@@ -5,7 +5,7 @@
       "label": "dev",
       "dependsOn": [
         "build-dev",
-        "build-manifest-ff",
+        "build-manifest",
         "web-ext-dev"
       ],
       "group": {
@@ -19,6 +19,23 @@
       "problemMatcher": [],
       "label": "build-dev",
       "detail": "webpack --watch",
+      "group": "build",
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": true,
+        "group": "dev"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "yarn build-manifest -w",
+      "problemMatcher": [],
+      "label": "build-manifest",
+      "detail": "yarn build-manifest -w",
       "group": "build",
       "presentation": {
         "echo": false,
@@ -70,7 +87,7 @@
       "group": "build",
       "problemMatcher": [],
       "label": "build-manifest-ff",
-      "detail": "cross-env BROWSER=firefox node manifest.js",
+      "detail": "node manifest.js --browser=firefox",
       "presentation": {
         "echo": false,
         "reveal": "always",

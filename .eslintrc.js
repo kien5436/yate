@@ -1,3 +1,4 @@
+/** @type import('eslint').Linter.BaseConfig */
 module.exports = {
   env: {
     browser: true,
@@ -9,7 +10,7 @@ module.exports = {
     'preact',
   ],
   ignorePatterns: 'build/**',
-  parserOptions: { ecmaVersion: 2020 },
+  parserOptions: { ecmaVersion: 'latest' },
   rules: {
     'arrow-parens': [
       'error',
@@ -30,6 +31,10 @@ module.exports = {
       'error',
       'always',
       { omitLastInOneLineBlock: true },
+    ],
+    yoda: [
+      'error',
+      'always',
     ],
   },
 };
