@@ -1,0 +1,81 @@
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  src: url(res/fonts/Nunito-400.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 700;
+  src: url(res/fonts/Nunito-700.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "icomoon";
+  src: url(res/fonts/icomoon.woff) format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+/* #yate {
+  font-family: 'Nunito', sans-serif;
+}
+
+#yate input, #yate p {
+  font-family: inherit;
+}
+*/
+.feather {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icomoon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.feather-radio:before {
+  content: "\e906";
+}
+
+.feather-github:before {
+  content: "\e901";
+}
+
+.feather-help-circle:before {
+  content: "\e904";
+}
+
+.feather-swap:before {
+  content: "\e902";
+}
+
+.feather-list:before {
+  content: "\e900";
+}
+
+.feather-volume:before {
+  content: "\e903";
+}
+
+.feather-x:before {
+  content: "\e905";
+}
+
+.feather-star-empty:before {
+  content: "\e9d7";
+}
+
+.feather-star-full:before {
+  content: "\e9d9";
+}
+
