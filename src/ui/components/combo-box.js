@@ -13,7 +13,7 @@ export default class ComboBox extends HTMLElement {
   /** @type {HTMLLIElement | null} */
   #focusedOption = null;
   #currentValue = '';
-  static observedAttributes = ['placeholder'];
+  static observedAttributes = ['inputId', 'placeholder'];
 
   constructor() {
     super();
@@ -21,6 +21,12 @@ export default class ComboBox extends HTMLElement {
     /** @type {string[]} */
     this.options = [];
     this.selected = '';
+
+    this.onChange = new CustomEvent('change', {
+      bubbles: true,
+      cancelable: false,
+      detail: { value: () => this.selected },
+    });
   }
 
   connectedCallback() {
@@ -28,13 +34,14 @@ export default class ComboBox extends HTMLElement {
     const labelBtn = document.createElement('button');
 
     labelBtn.setAttribute('type', 'button');
-    labelBtn.setAttribute('class', 'yate:cursor-pointer yate:border yate:border-zinc-300 yate:rounded yate:px-2 yate:py-1 yate:text-sm yate:w-full yate:min-w-full yate:bg-transparent yate:max-h-8 yate:transition yate:focus:outline-none yate:focus:shadow-none yate:focus:border-blue-400 yate:dark:text-zinc-200 yate:dark:border-zinc-700');
+    labelBtn.setAttribute('class', 'yate:cursor-pointer yate:border yate:border-zinc-300 yate:rounded yate:px-2 yate:py-1 yate:text-sm yate:w-full yate:min-w-full yate:bg-transparent yate:max-h-8 yate:transition yate:focus:outline-none yate:focus:shadow-none yate:focus:border-blue-400 yate:dark:border-zinc-700 yate:h-20');
     labelBtn.textContent = this.selected;
     labelBtn.addEventListener('click', this.#toggleDropdown2.bind(this));
 
     const input = document.createElement('input');
 
-    input.setAttribute('class', 'yate:border yate:border-zinc-300 yate:rounded yate:px-2 yate:py-1 yate:text-sm yate:w-full yate:min-w-full yate:bg-transparent yate:max-h-8 yate:transition yate:focus:outline-none yate:focus:shadow-none yate:focus:border-blue-400 yate:dark:text-zinc-200 yate:dark:border-zinc-700');
+    input.setAttribute('class', 'yate:border yate:border-zinc-300 yate:rounded yate:px-2 yate:py-1 yate:text-sm yate:w-full yate:min-w-full yate:bg-transparent yate:max-h-8 yate:transition yate:focus:outline-none yate:focus:shadow-none yate:focus:border-blue-400 yate:dark:border-zinc-700');
+    input.id = this.getAttribute('inputId');
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', this.getAttribute('placeholder'));
     input.value = this.selected;
@@ -57,7 +64,7 @@ export default class ComboBox extends HTMLElement {
     dropdown.append(inputWrapper, ul);
     dropdown.addEventListener('click', this.#select.bind(this));
 
-    this.setAttribute('class', 'yate:relative');
+    this.classList.add('yate:relative', 'yate:dark:text-zinc-300');
     this.#labelBtn = labelBtn;
     this.#listEl = ul;
     this.#dropdown = dropdown;
@@ -88,7 +95,7 @@ export default class ComboBox extends HTMLElement {
 
     const li = document.createElement('li');
 
-    li.setAttribute('class', 'yate:cursor-pointer dark:yate:hover:bg-blue-600 yate:box-border yate:w-full yate:px-4 yate:py-1 yate:whitespace-nowrap yate:transition-colors yate:hover:bg-blue-400 yate:hover:text-zinc-50 yate:dark:text-zinc-200 yate:focus-visible:outline-none');
+    li.setAttribute('class', 'yate:cursor-pointer dark:yate:hover:bg-blue-600 yate:box-border yate:w-full yate:px-4 yate:py-1 yate:whitespace-nowrap yate:transition-colors yate:hover:bg-blue-400 yate:hover:text-zinc-50 yate:focus-visible:outline-none');
     li.setAttribute('data-value', option);
     li.setAttribute('tabindex', '-1');
     li.textContent = option;
@@ -116,11 +123,8 @@ export default class ComboBox extends HTMLElement {
       this.#labelBtn.classList.add('yate:border-blue-400');
       this.#labelBtn.classList.remove('yate:border-zinc-300', 'yate:dark:border-zinc-700');
 
-      if (null !== this.#focusedOption) {
-
+      if (null !== this.#focusedOption)
         this.#focusedOption.classList.add('yate:bg-blue-400', 'yate:text-zinc-50', 'dark:yate:bg-blue-600');
-        this.#focusedOption.focus();
-      }
 
       this.#inputEl.focus();
     }
@@ -140,9 +144,19 @@ export default class ComboBox extends HTMLElement {
 
     if ('LI' === e.target.tagName) {
 
-      this.selected = e.target.getAttribute('data-value');
-      this.#labelBtn.textContent = this.selected;
-      this.#focusedOption = e.target;
+      const value = e.target.getAttribute('data-value');
+
+      if (value !== this.selected) {
+
+        if (null !== this.#focusedOption)
+          this.#focusedOption.classList.remove('yate:bg-blue-400', 'yate:text-zinc-50', 'dark:yate:bg-blue-600');
+
+        this.selected = value;
+        this.#focusedOption = e.target;
+        this.#labelBtn.textContent = this.selected;
+
+        this.dispatchEvent(this.onChange);
+      }
 
       this.#toggleDropdown(false);
     }
@@ -161,31 +175,15 @@ export default class ComboBox extends HTMLElement {
     else if ('Enter' === e.key) {
       this.#select(e);
     }
-    else if ('ArrowDown' === e.key) {
+    else if ('ArrowDown' === e.key || 'ArrowUp' === e.key) {
 
       if (null !== this.#focusedOption)
         this.#focusedOption.classList.remove('yate:bg-blue-400', 'yate:text-zinc-50', 'dark:yate:bg-blue-600');
 
       if (null === this.#focusedOption)
-        this.#focusedOption = this.#listEl.firstElementChild;
+        this.#focusedOption = 'ArrowUp' === e.key ? this.#listEl.lastElementChild : this.#listEl.firstElementChild;
       else
-        this.#focusedOption = this.#focusedOption.nextElementSibling;
-
-      if (null !== this.#focusedOption) {
-
-        this.#focusedOption.classList.add('yate:bg-blue-400', 'yate:text-zinc-50', 'dark:yate:bg-blue-600');
-        this.#focusedOption.focus();
-      }
-    }
-    else if ('ArrowUp' === e.key) {
-
-      if (null !== this.#focusedOption)
-        this.#focusedOption.classList.remove('yate:bg-blue-400', 'yate:text-zinc-50', 'dark:yate:bg-blue-600');
-
-      if (null === this.#focusedOption)
-        this.#focusedOption = this.#listEl.lastElementChild;
-      else
-        this.#focusedOption = this.#focusedOption.previousElementSibling;
+        this.#focusedOption = 'ArrowUp' === e.key ? this.#focusedOption.previousElementSibling : this.#focusedOption.nextElementSibling;
 
       if (null !== this.#focusedOption) {
 
