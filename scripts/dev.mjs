@@ -57,7 +57,7 @@ try {
     if (!browserStarted) {
 
       const runOptions = {
-        devtools: true,
+        devtools: false,
         noInput: true,
         sourceDir: 'dist/yate',
       };

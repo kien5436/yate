@@ -1,5 +1,20 @@
 import { storage } from 'webextension-polyfill';
 
+/**
+ * @typedef {{
+ *   autoSwapLanguages: boolean,
+ *   darkTheme: boolean,
+ *   keepHistory: boolean,
+ *   shortcutPopup: string | null,
+ *   shortcutSelectedText: string | null,
+ *   shortcutTranslateFullPage: string | null,
+ *   sourceLang: string,
+ *   targetLang: string,
+ *   translateWithButton: boolean
+ * }} Settings
+ *
+ * @type {Settings}
+ */
 export const defaultOptions = {
   autoSwapLanguages: false,
   darkTheme: false,
@@ -12,7 +27,7 @@ export const defaultOptions = {
   translateWithButton: true,
 };
 
-export default async function getSettings() {
+export async function getSettings() {
   try {
     const options = await storage.sync.get();
 

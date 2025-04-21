@@ -24,10 +24,10 @@
     "message": "Dark theme"
   },
   "displayWithButton": {
-    "message": "Display translation button when selected text"
+    "message": "Display translation button when select text"
   },
   "displayWithoutButton": {
-    "message": "Display translation panel when selected text"
+    "message": "Display translation panel when select text"
   },
   "autoSwapLanguages": {
     "message": "Automatically swap languages"
@@ -72,3 +72,4 @@
     "message": "Sorry, the maximum length of text is $1"
   }
 }
+

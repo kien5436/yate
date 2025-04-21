@@ -29,4 +29,10 @@ customElements.define('button-link', class extends HTMLElement {
 
     this.append(a);
   }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+
+    if ('href' === name)
+      this.querySelector('a')?.setAttribute('href', newValue);
+  }
 });
