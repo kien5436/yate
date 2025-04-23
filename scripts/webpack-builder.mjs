@@ -23,7 +23,8 @@ export function watch(callback) {
       colors: true,
       builtAt: true,
       timings: true,
-      logging: 'error',
+      errors: true,
+      warnings: true,
     }));
 
     if (callback)

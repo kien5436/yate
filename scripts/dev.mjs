@@ -49,6 +49,7 @@ try {
   let browserStarted = false;
   let extensionRunner = null;
   const webpackWatcher = watch(async () => {
+
     await buildManifest('dist/assets.json', args.browser);
 
     if ('firefox' === args.browser) // lint firefox only because web-ext requires extension id while chromium doesn't
@@ -72,6 +73,7 @@ try {
       }
 
       extensionRunner = await webExt.cmd.run(runOptions, { shouldExitProgram: false });
+
       // eslint-disable-next-line require-atomic-updates
       browserStarted = true;
     }
