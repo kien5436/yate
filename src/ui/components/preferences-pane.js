@@ -3,32 +3,22 @@ import { i18n, storage } from 'webextension-polyfill';
 import './combo-box.js';
 import './form-control.js';
 import { langs, reversedLangs } from '../../background/api.js';
-import { defaultOptions, getSettings } from '../../settings.js';
+import { defaultOptions } from '../../settings.js';
+import SettingsService from '../common/settings-service.js';
 
 customElements.define('preferences-pane', class extends HTMLElement {
 
-  /** @type {import('../../settings.js').Settings} */
-  #settings = {};
+  #settingsService;
 
   constructor() {
     super();
+
+    this.#settingsService = new SettingsService();
   }
 
   async connectedCallback() {
 
     await this.#render();
-  }
-
-  /**
-   * @param {'sourceLang' | 'targetLang'} langType
-   * @returns {string[]}
-   */
-  #languages(langType) {
-
-    const names = Object.keys(langs).sort();
-    const autoLang = names.splice(names.indexOf('Auto detection'), 1);
-
-    return 'sourceLang' === langType ? autoLang.concat(names) : names;
   }
 
   /**
@@ -48,15 +38,14 @@ customElements.define('preferences-pane', class extends HTMLElement {
     comboBox.setAttribute('inputId', langType);
     comboBox.setAttribute('placeholder', placeholder);
     comboBox.classList.add('yate:w-1/2');
-    comboBox.options = this.#languages(langType);
+    comboBox.options = this.#settingsService.getLanguages(langType);
     comboBox.selected = selected;
 
     comboBox.addEventListener('change', async (e) => {
 
       const langName = e.detail.value();
 
-      await storage.sync.set({ [langType]: langs[langName] });
-      this.#settings[langType] = langs[langName];
+      await this.#settingsService.setSettings(langType, langs[langName]);
     });
 
     return this.#createControl({
@@ -88,10 +77,7 @@ customElements.define('preferences-pane', class extends HTMLElement {
 
     input.addEventListener('change', async (e) => {
 
-      const translateWithButton = '1' === e.target.value;
-
-      await storage.sync.set({ translateWithButton });
-      this.#settings.translateWithButton = translateWithButton;
+      await this.#settingsService.setSettings('translateWithButton', '1' === e.target.value);
     });
 
     return this.#createControl({
@@ -122,8 +108,7 @@ customElements.define('preferences-pane', class extends HTMLElement {
 
     input.addEventListener('change', async (e) => {
 
-      await storage.sync.set({ [name]: e.target.checked });
-      this.#settings[name] = e.target.checked;
+      await this.#settingsService.setSettings(name, e.target.checked);
 
       if ('darkTheme' === name)
         document.documentElement.classList.toggle('yate:dark', e.target.checked);
@@ -184,7 +169,7 @@ customElements.define('preferences-pane', class extends HTMLElement {
 
   async #render() {
 
-    this.#settings = await getSettings();
+    await this.#settingsService.loadSettings();
 
     const preferencesLabel = document.createElement('p');
 
@@ -193,45 +178,45 @@ customElements.define('preferences-pane', class extends HTMLElement {
 
     const sourceLangFormControl = this.#createLangControl({
       placeholder: i18n.getMessage('placeholderSelectLanguage'),
-      selected: reversedLangs[this.#settings.sourceLang],
+      selected: reversedLangs[this.#settingsService.settings.sourceLang],
       label: i18n.getMessage('selectSourceLang'),
       langType: 'sourceLang',
     });
     const targetLangFormControl = this.#createLangControl({
       placeholder: i18n.getMessage('placeholderSelectLanguage'),
-      selected: reversedLangs[this.#settings.targetLang],
+      selected: reversedLangs[this.#settingsService.settings.targetLang],
       label: i18n.getMessage('selectTargetLang'),
       langType: 'targetLang',
     });
     const displayWithBtnControl = this.#createDisplayControl({
       label: i18n.getMessage('displayWithButton'),
       inputId: 'displayWithBtn',
-      checked: this.#settings.translateWithButton,
+      checked: this.#settingsService.settings.translateWithButton,
       value: '1',
     });
     const displayWithoutBtnControl = this.#createDisplayControl({
       label: i18n.getMessage('displayWithoutButton'),
       inputId: 'displayWithoutBtn',
-      checked: !this.#settings.translateWithButton,
+      checked: !this.#settingsService.settings.translateWithButton,
       value: '0',
     });
     const keepHistoryControl = this.#createCheckboxControl({
       label: i18n.getMessage('keepHistory'),
       inputId: 'keepHistory',
       name: 'keepHistory',
-      checked: this.#settings.keepHistory,
+      checked: this.#settingsService.settings.keepHistory,
     });
     const autoSwapLangsControl = this.#createCheckboxControl({
       label: i18n.getMessage('autoSwapLanguages'),
       inputId: 'autoSwapLangs',
       name: 'autoSwapLanguages',
-      checked: this.#settings.autoSwapLanguages,
+      checked: this.#settingsService.settings.autoSwapLanguages,
     });
     const toggleThemeControl = this.#createCheckboxControl({
       label: i18n.getMessage('toggleTheme'),
       inputId: 'toggleTheme',
       name: 'darkTheme',
-      checked: this.#settings.darkTheme,
+      checked: this.#settingsService.settings.darkTheme,
     });
 
     const resetBtn = document.createElement('button');
@@ -264,6 +249,6 @@ customElements.define('preferences-pane', class extends HTMLElement {
     );
     this.classList.add('yate:flex', 'yate:flex-col', 'yate:gap-2', 'yate:p-3');
 
-    document.documentElement.classList.toggle('yate:dark', this.#settings.darkTheme);
+    document.documentElement.classList.toggle('yate:dark', this.#settingsService.settings.darkTheme);
   }
 });
