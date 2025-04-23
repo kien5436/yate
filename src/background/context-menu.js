@@ -26,9 +26,6 @@ function onClick({ menuItemId }, { id, url }) {
 
   if ('translateFullPage' === menuItemId)
     openInGoogleTranslate(url);
-
   else if ('translateSelectedText' === menuItemId)
     browserTabs.sendMessage(id, { action: 'showTranslationPanel' });
-
 }
-

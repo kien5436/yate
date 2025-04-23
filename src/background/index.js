@@ -10,4 +10,3 @@ storage.onChanged.addListener(storageChanged);
 runtime.onConnect.addListener(connected);
 
 createMenu();
-

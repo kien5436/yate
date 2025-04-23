@@ -1,8 +1,7 @@
-import '../common/base.css';
-import '../common/fonts.css';
-
 import { runtime } from 'webextension-polyfill';
 
+import '../common/base.css';
+import '../common/fonts.css';
 import '../components/button-link.js';
 import '../components/preferences-pane.js';
 import { extensionUrl } from '../../settings.js';
