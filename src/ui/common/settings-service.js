@@ -43,7 +43,6 @@ export default class SettingsService {
    */
   async setLanguage(langType, langName) {
 
-    console.debug('setLanguage', langType, langs[langName]);
     await storage.sync.set({ [langType]: langs[langName] });
     this.settings[langType] = langs[langName];
   }

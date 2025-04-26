@@ -21,8 +21,8 @@ export default class LanguageSelection extends HTMLElement {
       bubbles: false,
       cancelable: false,
       detail: {
-        value: () => ({
-          sourceLang: this.#settingsService.settings.sourceLang,
+        changes: () => ({
+          sourceLang: this.getTemporarySourceLang() || this.#settingsService.settings.sourceLang,
           targetLang: this.#settingsService.settings.targetLang,
         }),
       },
@@ -30,6 +30,12 @@ export default class LanguageSelection extends HTMLElement {
     this.onSwap = new CustomEvent('yswap', {
       bubbles: false,
       cancelable: false,
+      detail: {
+        changes: () => ({
+          sourceLang: this.getTemporarySourceLang() || this.#settingsService.settings.sourceLang,
+          targetLang: this.#settingsService.settings.targetLang,
+        }),
+      },
     });
   }
 

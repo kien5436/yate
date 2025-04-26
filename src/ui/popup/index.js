@@ -76,14 +76,21 @@ customElements.define('yate-popup', class extends HTMLElement {
 
     this.#languageSelection = languageSelection;
 
-    languageSelection.addEventListener('ychange', () => {
+    languageSelection.addEventListener('ychange', (e) => {
 
+      const { sourceLang, targetLang } = e.detail.changes();
+
+      this.#sourceTextBox.setAttribute('langCode', sourceLang);
+      this.#targetTextBox.setAttribute('langCode', targetLang);
       this.#sourceTextBox.dispatchEvent(this.#sourceTextBox.onInput);
     });
-    languageSelection.addEventListener('yswap', () => {
+    languageSelection.addEventListener('yswap', (e) => {
 
+      const { sourceLang, targetLang } = e.detail.changes();
       const tmp = this.#sourceTextBox.value;
 
+      this.#sourceTextBox.setAttribute('langCode', sourceLang);
+      this.#targetTextBox.setAttribute('langCode', targetLang);
       this.#sourceTextBox.setValue(this.#targetTextBox.value);
       this.#targetTextBox.setValue(tmp);
       this.#sourceTextBox.dispatchEvent(this.#sourceTextBox.onInput);
@@ -157,7 +164,17 @@ customElements.define('yate-popup', class extends HTMLElement {
     await this.#translateService.translate(text, sourceLang, targetLang);
   }
 
-  #readAloud(e) { }
+  #readAloud(e) {
+
+    const langCode = e.detail.langCode();
+    const text = e.detail.value().trim() || '';
+
+    // console.debug(`read '${text}' in '${langCode}', temp lang: ${this.#languageSelection.getTemporarySourceLang()}`);
+
+    if ('' === text || 'auto' === langCode) return;
+
+    this.#translateService.tts(text, langCode);
+  }
 
   /**
    * @param {{
@@ -174,12 +191,12 @@ customElements.define('yate-popup', class extends HTMLElement {
       return;
     }
 
-    console.debug(message);
     await this.#translateService.cache(message);
 
     if (this.#settingsService.settings.keepHistory)
       await this.#translateService.savePopupTranslations(this.#sourceTextBox.value, message.translation.trans);
 
+    this.#sourceTextBox.setAttribute('langCode', message.translation.sourceLang);
     this.#targetTextBox.setValue(message.translation.trans);
     this.#languageSelection.setTemporarySourceLang(message.translation.sourceLang);
   }

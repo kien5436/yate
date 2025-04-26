@@ -106,7 +106,7 @@ async function doTranslate(message, port) {
 
         const _translation = await translate(chunk, message.sourceLang, message.targetLang);
 
-        await sleep(200);
+        await randomSleep(150, 250);
 
         if (null !== _translation) {
           translation.trans += `${_translation.trans} `;
@@ -190,7 +190,9 @@ function splitSafe(text, chunkLength) {
   return chunks;
 }
 
-function sleep(ms) {
+function randomSleep(min, max) {
+
+  const ms = Math.floor(Math.random() * (max - min + 1) + min);
 
   return new Promise((r) => { setTimeout(r, ms) });
 }

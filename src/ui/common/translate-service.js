@@ -34,7 +34,14 @@ export default class TranslateService {
     this.#port.postMessage(message);
   }
 
-  tts(text, targetLang) { }
+  tts(text, targetLang) {
+
+    this.#port.postMessage({
+      action: 'tts',
+      targetLang,
+      text,
+    });
+  }
 
   async getSavedTranslations() {
 

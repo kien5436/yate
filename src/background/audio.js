@@ -1,9 +1,8 @@
 export default class AudioPlayer {
 
   src = null;
-
+  /** @type {HTMLAudioElement | null} */
   audio = null;
-
   paused = true;
 
   /** @param {Blob} src */
@@ -54,4 +53,3 @@ export default class AudioPlayer {
     });
   }
 }
-
