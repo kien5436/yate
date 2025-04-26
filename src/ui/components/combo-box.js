@@ -13,6 +13,7 @@ export default class ComboBox extends HTMLElement {
   /** @type {HTMLLIElement | null} */
   #focusedOption = null;
   #currentValue = '';
+  #selected = '';
   static observedAttributes = ['inputId', 'placeholder'];
 
   constructor() {
@@ -20,14 +21,24 @@ export default class ComboBox extends HTMLElement {
 
     /** @type {string[]} */
     this.options = [];
-    this.selected = '';
 
-    this.onChange = new CustomEvent('change', {
-      bubbles: true,
+    this.onChange = new CustomEvent('ychange', {
+      bubbles: false,
       cancelable: false,
-      detail: { value: () => this.selected },
+      detail: { value: () => this.#selected },
     });
   }
+
+  /**
+   * @param {string} value
+   */
+  set selected(value) {
+
+    this.#selected = value;
+    if (this.#labelBtn) this.#labelBtn.textContent = value;
+  }
+
+  get selected() { return this.#selected }
 
   connectedCallback() {
 
@@ -35,7 +46,7 @@ export default class ComboBox extends HTMLElement {
 
     labelBtn.setAttribute('type', 'button');
     labelBtn.setAttribute('class', 'yate:cursor-pointer yate:border yate:border-zinc-300 yate:rounded yate:px-2 yate:py-1 yate:text-sm yate:w-full yate:min-w-full yate:bg-transparent yate:max-h-8 yate:transition yate:focus:outline-none yate:focus:shadow-none yate:focus:border-blue-400 yate:dark:border-zinc-700 yate:h-20');
-    labelBtn.textContent = this.selected;
+    labelBtn.textContent = this.#selected;
     labelBtn.addEventListener('click', this.#toggleDropdown2.bind(this));
 
     const input = document.createElement('input');
@@ -44,7 +55,8 @@ export default class ComboBox extends HTMLElement {
     input.id = this.getAttribute('inputId');
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', this.getAttribute('placeholder'));
-    input.value = this.selected;
+    input.value = this.#selected;
+    input.autocomplete = 'off';
     input.addEventListener('input', this.#onInput.bind(this));
     this.#inputEl = input;
 
@@ -146,14 +158,14 @@ export default class ComboBox extends HTMLElement {
 
       const value = e.target.getAttribute('data-value');
 
-      if (value !== this.selected) {
+      if (value !== this.#selected) {
 
         if (null !== this.#focusedOption)
           this.#focusedOption.classList.remove('yate:bg-blue-400', 'yate:text-zinc-50', 'dark:yate:bg-blue-600');
 
-        this.selected = value;
+        this.#selected = value;
         this.#focusedOption = e.target;
-        this.#labelBtn.textContent = this.selected;
+        this.#labelBtn.textContent = this.#selected;
 
         this.dispatchEvent(this.onChange);
       }

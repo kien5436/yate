@@ -2,7 +2,7 @@ import { i18n, storage } from 'webextension-polyfill';
 
 import './combo-box.js';
 import './form-control.js';
-import { langs, reversedLangs } from '../../background/api.js';
+import { reversedLangs } from '../../background/api.js';
 import { defaultOptions } from '../../settings.js';
 import SettingsService from '../common/settings-service.js';
 
@@ -41,11 +41,9 @@ customElements.define('preferences-pane', class extends HTMLElement {
     comboBox.options = this.#settingsService.getLanguages(langType);
     comboBox.selected = selected;
 
-    comboBox.addEventListener('change', async (e) => {
+    comboBox.addEventListener('ychange', async (e) => {
 
-      const langName = e.detail.value();
-
-      await this.#settingsService.setSettings(langType, langs[langName]);
+      await this.#settingsService.setLanguage(langType, e.detail.value());
     });
 
     return this.#createControl({

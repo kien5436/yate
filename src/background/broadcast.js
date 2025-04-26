@@ -45,7 +45,7 @@ export function connected(port) {
 }
 
 /**
- * @param {{action: 'translate' | 'tts' | 'stop'}} message
+ * @param {{action: 'translate' | 'tts' | 'stop' | 'getCachedTranslation'}} message
  * @param {import('webextension-polyfill').Runtime.Port} port
  */
 async function onReceiveMessage(message, port) {
@@ -63,17 +63,18 @@ async function onReceiveMessage(message, port) {
       cancelActions(port);
 
       break;
+    case 'getCachedTranslation':
+      sendCachedTranslation(message, port);
+
+      break;
   }
 }
 
 /** @param {import('webextension-polyfill').Runtime.Port} port */
 function cancelActions(port) {
 
-  console.debug('broadcast.js:49: disconnect');
-
   if (!audio.paused)
     audio.pause();
-
 }
 
 /**
@@ -99,9 +100,7 @@ async function doTranslate(message, port) {
 
   try {
     if (1 === chunks.length)
-
       translation = await translate(chunks[0], message.sourceLang, message.targetLang);
-
     else
       for (const chunk of chunks) {
 
@@ -196,3 +195,19 @@ function sleep(ms) {
   return new Promise((r) => { setTimeout(r, ms) });
 }
 
+/**
+ * @param {{
+ *  text: string;
+ *  sourceLang: string;
+ *  targetLang: string;
+ *  result: any;
+ * }} message
+ * @param {import('webextension-polyfill').Runtime.Port} port
+ */
+function sendCachedTranslation(message, port) {
+
+  port.postMessage({
+    key: message.text + message.sourceLang + message.targetLang,
+    translation: message.result,
+  });
+}

@@ -70,6 +70,14 @@
   },
   "tooLongText": {
     "message": "Sorry, the maximum length of text is $1"
+  },
+  "swapLanguages": {
+    "message": "Swap languages"
+  },
+  "readAloud": {
+    "message": "Read aloud"
+  },
+  "clearText": {
+    "message": "Clear text"
   }
 }
-

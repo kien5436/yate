@@ -12,6 +12,8 @@ export function watch(callback) {
 
   return compiler.watch({ stdin: true }, (err, stats) => {
 
+    process.stdout.write('\x1bc');
+
     if (err) {
       logger('error', err);
 

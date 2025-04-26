@@ -42,6 +42,8 @@ export async function getSettings() {
 
 export const extensionUrl = 'firefox' === ua() ? 'https://addons.mozilla.org/en-US/firefox/addon/yate/' : 'https://microsoftedge.microsoft.com/addons/detail/dimpiplalplpcfdkgjciifgjobpniofa';
 
+export const MAX_CACHE_LEN = 100;
+
 function ua() {
   if (-1 !== navigator.userAgent.indexOf('Chrome'))
     return 'chromium';

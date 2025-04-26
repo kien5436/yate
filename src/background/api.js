@@ -353,25 +353,26 @@ function buildRequestUrl(text, sourceLang, targetLang, fallback = false) {
 }
 
 /**
+ * @typedef {{
+ *  trans: string,
+ *  spelling: string,
+ *  synonyms: Array<{
+ *    type: string,
+ *    terms: Array<{
+ *      word: string,
+ *      reverseTranslation: string
+ *    }>
+ *  }>,
+ *  sourceLang: string
+ * }} TranslationResult;
+ */
+/**
  * @param {object} data JSON-object
  */
 function getResult(data) {
 
   const { sentences, dict, ld_result: { srclangs } } = data;
-  /**
-   * @type {{
-   *  trans: string,
-   *  spelling: string,
-   *  synonyms: Array<{
-   *    type: string,
-   *    terms: Array<{
-   *      word: string,
-   *      reverseTranslation: string
-   *    }>
-   *  }>,
-   *  sourceLang: string
-   * }}
-   */
+  /** @type {TranslationResult} */
   const result = { sourceLang: srclangs[0] };
 
   if (undefined === dict) {

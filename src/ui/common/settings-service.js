@@ -1,9 +1,9 @@
 import { storage } from 'webextension-polyfill';
 
 import { langs } from '../../background/api.js';
-import { getSettings } from '../../settings.js';
+import { defaultOptions, getSettings } from '../../settings.js';
 
-export default class {
+export default class SettingsService {
 
   constructor() {
     /** @type {import('../../settings.js').Settings} */
@@ -43,7 +43,18 @@ export default class {
    */
   async setLanguage(langType, langName) {
 
+    console.debug('setLanguage', langType, langs[langName]);
     await storage.sync.set({ [langType]: langs[langName] });
     this.settings[langType] = langs[langName];
+  }
+
+  async getSelectedLanguages() {
+
+    const { sourceLang, targetLang } = await storage.sync.get(['sourceLang', 'targetLang']);
+
+    return {
+      sourceLang: sourceLang || defaultOptions.sourceLang,
+      targetLang: targetLang || defaultOptions.targetLang,
+    };
   }
 }
