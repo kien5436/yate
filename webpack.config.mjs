@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { resolve } from 'node:path';
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';

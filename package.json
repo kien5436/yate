@@ -11,7 +11,7 @@
   "type": "module",
   "author": "Phạm Trung Kiên",
   "license": "MIT",
-  "packageManager": "pnpm@10.8.0",
+  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
     "@stylistic/eslint-plugin-js": "^4.2.0",
     "@tailwindcss/postcss": "^4.1.4",

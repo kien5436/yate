@@ -36,7 +36,6 @@ export default async function(assetsPath, browser) {
     content_scripts: [
       {
         all_frames: true,
-        css: null,
         js: null,
         matches: ['*://*/*'],
         run_at: 'document_end',
@@ -68,7 +67,10 @@ export default async function(assetsPath, browser) {
     const assets = JSON.parse(data);
 
     manifest.background.scripts = assets.background;
-    manifest.content_scripts[0].css = assets.embedded.filter((file) => file.endsWith('css'));
+    manifest.web_accessible_resources.push({
+      resources: assets.embedded.filter((file) => file.endsWith('css')),
+      matches: ['*://*/*'],
+    });
     manifest.content_scripts[0].js = assets.embedded.filter((file) => file.endsWith('js'));
 
     if ('firefox' === browser)

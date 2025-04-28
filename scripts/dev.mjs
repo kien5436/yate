@@ -47,7 +47,7 @@ try {
     throw new Error('Missing --browser arg. Available options: "firefox", "chromium"');
 
   let browserStarted = false;
-  let extensionRunner = null;
+  const extensionRunner = null;
   const webpackWatcher = watch(async () => {
 
     await buildManifest('dist/assets.json', args.browser);
@@ -72,9 +72,8 @@ try {
         runOptions.chromiumBinary = '/Applications/Microsoft Edge Dev.app/Contents/MacOS/Microsoft Edge Dev';
       }
 
-      extensionRunner = await webExt.cmd.run(runOptions, { shouldExitProgram: false });
+      // extensionRunner = await webExt.cmd.run(runOptions, { shouldExitProgram: false });
 
-      // eslint-disable-next-line require-atomic-updates
       browserStarted = true;
     }
   });
