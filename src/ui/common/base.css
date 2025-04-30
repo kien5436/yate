@@ -4,4 +4,41 @@
 
 @theme {
   --font-nunito: Nunito, sans-serif;
+  --font-icomoon: icomoon;
+}
+
+.feather-radio:before {
+  content: "\e906";
+}
+
+.feather-github:before {
+  content: "\e901";
+}
+
+.feather-help-circle:before {
+  content: "\e904";
+}
+
+.feather-swap:before {
+  content: "\e902";
+}
+
+.feather-list:before {
+  content: "\e900";
+}
+
+.feather-volume:before {
+  content: "\e903";
+}
+
+.feather-x:before {
+  content: "\e905";
+}
+
+.feather-star-empty:before {
+  content: "\e9d7";
+}
+
+.feather-star-full:before {
+  content: "\e9d9";
 }

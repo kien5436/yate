@@ -15,7 +15,7 @@ export default class ButtonIcon extends HTMLElement {
 
     const iconEl = document.createElement('i');
 
-    iconEl.setAttribute('class', `feather ${this.getAttribute('icon')}`);
+    iconEl.setAttribute('class', `yate:font-icomoon yate:not-italic ${this.getAttribute('icon')}`);
 
     const href = this.getAttribute('href');
     let btnEl;

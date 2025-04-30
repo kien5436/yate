@@ -1,7 +1,7 @@
 import { runtime } from 'webextension-polyfill';
 
 import '../common/base.css';
-import '../common/fonts.css';
+import fonts from '!!css-loader?{"sourceMap":false,"exportType":"string","url":false}!../common/fonts.css';
 import '../common/scrollbar.css';
 import SettingsService from '../common/settings-service.js';
 import TranslateService from '../common/translate-service.js';
@@ -29,12 +29,14 @@ customElements.define('yate-translator', class extends HTMLElement {
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
     const styles = this.#loadStyles();
+    const fontStyles = this.#loadFonts();
     const component = this.#settingsService.settings.translateWithButton ? this.#createTranslationButton() : this.#createTranslationPane();
 
     if (this.#settingsService.settings.darkTheme)
       component.classList.add('yate:dark');
 
     shadowRoot.append(...styles, component);
+    document.head.append(fontStyles);
 
     this.#shadowRoot = shadowRoot;
     this.#displayedComponent = component;
@@ -59,6 +61,17 @@ customElements.define('yate-translator', class extends HTMLElement {
     return styles;
   }
 
+  #loadFonts() {
+
+    const style = document.createElement('style');
+    const rootUrl = runtime.getURL('');
+
+    style.textContent = fonts.replace(/url\(([^)]+)\)/gm, `url("${rootUrl}$1")`);
+    style.id = 'yate-fonts';
+
+    return style;
+  }
+
   #createTranslationButton() {
 
     const button = document.createElement('button');
@@ -69,6 +82,9 @@ customElements.define('yate-translator', class extends HTMLElement {
     button.addEventListener('click', () => {
 
       const pane = this.#createTranslationPane();
+
+      if (this.#settingsService.settings.darkTheme)
+        pane.classList.add('yate:dark');
 
       this.#shadowRoot.replaceChild(pane, this.#displayedComponent);
       this.#displayedComponent = pane;
@@ -87,7 +103,7 @@ customElements.define('yate-translator', class extends HTMLElement {
 
     const pane = document.createElement('div');
 
-    pane.classList.add('yate:w-64', 'yate:max-h-64', 'yate:overflow-hidden', 'yate:bg-white', 'yate:rounded', 'yate:shadow', 'yate:text-base', 'yate:text-zinc-800', 'yate:dark:bg-zinc-900', 'yate:dark:shadow-dark');
+    pane.classList.add('yate:w-64', 'yate:max-h-64', 'yate:overflow-hidden', 'yate:bg-white', 'yate:rounded', 'yate:shadow', 'yate:text-base', 'yate:text-zinc-800', 'yate:dark:bg-zinc-900', 'yate:dark:text-zinc-200', 'yate:dark:shadow-dark', 'yate:font-nunito');
 
     const languageSelection = document.createElement('language-selection');
 

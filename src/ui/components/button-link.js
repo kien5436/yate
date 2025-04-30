@@ -11,7 +11,7 @@ customElements.define('button-link', class extends HTMLElement {
     const iconEl = document.createElement('i');
     const iconWrapperEl = document.createElement('span');
 
-    iconEl.setAttribute('class', `yate:inline-block yate:text-base feather ${this.getAttribute('icon')}`);
+    iconEl.setAttribute('class', `yate:inline-block yate:text-base yate:font-icomoon yate:not-italic ${this.getAttribute('icon')}`);
     iconWrapperEl.setAttribute('class', 'yate:inline-flex yate:h-6 yate:w-6 yate:items-center yate:justify-center');
     iconWrapperEl.append(iconEl);
 
