@@ -46,7 +46,7 @@ export default class ComboBox extends HTMLElement {
 
     labelBtn.setAttribute('type', 'button');
     labelBtn.setAttribute('class', 'yate:cursor-pointer yate:border yate:border-zinc-300 yate:rounded yate:px-2 yate:py-1 yate:text-sm yate:w-full yate:min-w-full yate:bg-transparent yate:max-h-8 yate:transition yate:focus:outline-none yate:focus:shadow-none yate:focus:border-blue-400 yate:dark:border-zinc-700 yate:h-20');
-    labelBtn.textContent = this.#selected;
+    labelBtn.textContent = this.selected;
     labelBtn.addEventListener('click', this.#toggleDropdown2.bind(this));
 
     const input = document.createElement('input');
@@ -55,7 +55,7 @@ export default class ComboBox extends HTMLElement {
     input.id = this.getAttribute('inputId');
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', this.getAttribute('placeholder'));
-    input.value = this.#selected;
+    input.value = this.selected;
     input.autocomplete = 'off';
     input.addEventListener('input', this.#onInput.bind(this));
     this.#inputEl = input;

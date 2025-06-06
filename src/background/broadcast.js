@@ -117,15 +117,15 @@ async function doTranslate(message, port) {
     port.postMessage({
       key: message.text + message.sourceLang + message.targetLang,
       translation,
+      text: message.text,
     });
   }
   catch (err) {
+
     console.error('broadcast.js:121:', err);
 
     if (ERROR_BLOCKED_BY_SERVER === err.code)
-
       port.postMessage({ error: i18n.getMessage('serviceUnavailable') });
-
   }
 }
 
@@ -211,5 +211,6 @@ function sendCachedTranslation(message, port) {
   port.postMessage({
     key: message.text + message.sourceLang + message.targetLang,
     translation: message.result,
+    text: message.text,
   });
 }

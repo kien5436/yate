@@ -355,8 +355,8 @@ function buildRequestUrl(text, sourceLang, targetLang, fallback = false) {
 /**
  * @typedef {{
  *  trans: string,
- *  spelling: string,
- *  synonyms: Array<{
+ *  spelling?: string,
+ *  synonyms?: Array<{
  *    type: string,
  *    terms: Array<{
  *      word: string,
