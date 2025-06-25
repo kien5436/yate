@@ -1,3 +1,5 @@
+import { h } from '../common/dom.js';
+
 customElements.define('button-link', class extends HTMLElement {
 
   static observedAttributes = ['icon', 'label', 'href'];
@@ -36,3 +38,15 @@ customElements.define('button-link', class extends HTMLElement {
       this.querySelector('a')?.setAttribute('href', newValue);
   }
 });
+
+export default function ButtonLink({ icon, label, href }) {
+
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className="yate:flex yate:items-center yate:rounded yate:border yate:border-blue-400 yate:px-2 yate:py-1 yate:text-sm yate:text-blue-400 yate:transition yate:hover:bg-blue-400 yate:hover:text-white">
+      <span className="yate:inline-flex yate:h-6 yate:w-6 yate:items-center yate:justify-center">
+        <i className={`yate:inline-block yate:text-base yate:font-icomoon yate:not-italic ${icon}`}></i>
+      </span>
+      <span>{label}</span>
+    </a>
+  )
+}

@@ -11,8 +11,8 @@ export default {
   mode: 'production',
   entry: {
     background: './src/background/index.js',
-    embedded: './src/ui/embedded/index.js',
-    options: './src/ui/options-page/index.js',
+    embedded: './src/ui/embedded/index.jsx',
+    options: './src/ui/options-page/index.jsx',
     popup: './src/ui/popup/index.js',
   },
   output: {
@@ -48,6 +48,11 @@ export default {
         test: /\.png$/,
         type: 'asset/resource',
         generator: { filename: 'res/icons/[name][ext]' },
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: { loader: 'babel-loader' },
       },
     ],
   },
@@ -99,6 +104,6 @@ export default {
       new CssMinimizerPlugin({ minimizerOptions: { preset: ['default', { discardComments: { removeAll: true } }] } }),
     ],
   },
-  resolve: { extensions: ['.js', '.css'] },
+  resolve: { extensions: ['.js', 'jsx', '.css'] },
   stats: 'minimal',
 };

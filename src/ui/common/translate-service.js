@@ -13,6 +13,9 @@ export default class TranslateService {
   constructor(name) {
 
     this.#port = runtime.connect({ name });
+    this.#port.onDisconnect.addListener(() => {
+      console.debug('disconnect', name);
+    });
   }
 
   async translate(text, sourceLang, targetLang) {

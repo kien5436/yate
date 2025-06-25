@@ -73,6 +73,7 @@ async function onReceiveMessage(message, port) {
 /** @param {import('webextension-polyfill').Runtime.Port} port */
 function cancelActions(port) {
 
+  console.debug('broadcast disconnects', port.name);
   if (!audio.paused)
     audio.pause();
 }
